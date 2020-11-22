@@ -1,1 +1,1 @@
-doc output created with rmd
+html & doc outputs created with rmd

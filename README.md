@@ -1,2 +1,2 @@
 # intro_tidyverse-dplyr
-In this repository I'll introduce the core tidyverse packages focusing mainly on dplyr
+In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages. It is based on [tidyverse](https://www.tidyverse.org/) and [Jesse Mostipak's dplyr  tutorial](https://www.kaggle.com/jessemostipak/dive-into-dplyr-tutorial-1). I rearranged the information of these two files in a manner that I find the most interesting to understand the logic of tidyverse based on my own experience. Also, I add some comments and examples to understand it better. All credits deserves to the authors of the original documents.
