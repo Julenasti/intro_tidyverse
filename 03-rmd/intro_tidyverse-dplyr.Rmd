@@ -3,16 +3,16 @@ title: "Introduction to tidyverse (focusing on dplyr)"
 author: "Julen Astigarraga"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    df_print: paged
   word_document:
     reference_docx: docx_template.docx
+  html_document:
+    df_print: paged
 editor_options:
   chunk_output_type: inline
 ---
 
-```{r, echo = FALSE, fig.align = 'center', fig.cap = "I'm far from being an expert but I have quite a bit of experience in code crashes."}
-knitr::include_graphics('../02-figures/01-car-crash.JPG')
+```{r, echo = FALSE, fig.align = 'center', fig.cap = "by @allison_horst"}
+knitr::include_graphics('../02-figures/01-tidydata.jpg')
 ```
 
 
@@ -150,7 +150,9 @@ cars_brand_best %>%
 + tidy data 3 characteristics:
 1. Every column is variable
 2. Every row is an observation
-3. Every cell is a single value
+3. Every cell is a single measurement
+
+[Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/) 
 
 
 ## 5| purrr (functional programming)
