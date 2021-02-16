@@ -1,9 +1,9 @@
 ggspecies <- function (sp.id) {
   
-  #' @description 
+  #' @description create a ggplot highlighting the species that interests you
   #' @author Julen Astigarraga
-  #' @param sp.id
-  #' @return 
+  #' @param sp.id species id
+  #' @return a ggplot highlighting the species that interests you
   
   ggplot(df, aes(x = prod_year,
              y = prod_value,
@@ -41,10 +41,10 @@ ggspecies <- function (sp.id) {
 
 purrr_lm <- function(df){
   
-  #' @description 
+  #' @description fit a linear model using species id as explanatory variable and productivity value as response variable
   #' @author Julen Astigarraga
   #' @param df
-  #' @return 
+  #' @return a linear model
   
   lm(data = df, prod_value ~ species)
   

@@ -8,7 +8,7 @@ output:
   word_document:
     reference_docx: docx_template.docx
 editor_options:
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include = FALSE}
@@ -139,7 +139,7 @@ rank_med <- tibble(ranking = c("1 position", "2 position",
 cars_brand_best %>% 
   slice(1:3) %>% 
   mutate(ranking = c("1 position", "2 position",
-                                "3 position")) %>% 
+                     "3 position")) %>% 
   left_join(rank_med)
 ```
 
