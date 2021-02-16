@@ -3,39 +3,42 @@ title: "Introduction to tidyverse (focusing on dplyr)"
 author: "Julen Astigarraga"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  word_document:
-    reference_docx: docx_template.docx
   html_document:
     df_print: paged
+  word_document:
+    reference_docx: docx_template.docx
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
-```{r, echo = FALSE, fig.align = 'center', fig.cap = "by @allison_horst"}
-knitr::include_graphics('../02-figures/01-tidydata.jpg')
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, warning = FALSE, message = FALSE)
+library(here)
+library(gghighlight)
+library(patchwork)
 ```
 
 
-In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages. It is based on [tidyverse](https://www.tidyverse.org/) and [Jesse Mostipak's dplyr  tutorial](https://www.kaggle.com/jessemostipak/dive-into-dplyr-tutorial-1). I rearranged the information of these two files in a manner that I find the most interesting to understand the logic of tidyverse based on my own experience. Also, I add some comments and examples to understand it better. All credits deserves to the authors of the original documents.
+```{r fig tidydata, fig.align = 'center', fig.cap = "by @allison_horst"}
+knitr::include_graphics(here("03-figures", "01-tidydata.jpg"))
+```
+
+
+In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages. It is based on [tidyverse](https://www.tidyverse.org/) and [Jesse Mostipak's dplyr  tutorial](https://www.kaggle.com/jessemostipak/dive-into-dplyr-tutorial-1). I rearranged the information of these two files in a manner that I find the most interesting to understand the logic of tidyverse based on my own experience. Also, I add some comments and examples to understand it better.
 
 # Tidyverse
-```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
-knitr::include_graphics('../02-figures/02-tidyverse-packages.png')
+```{r fig tidyverse packages, fig.align = 'center', out.width = "30%"}
+knitr::include_graphics(here("03-figures", "02-tidyverse-packages.png"))
 ```
 > The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.
 > --- [tidyverse](https://www.tidyverse.org/)
 
-```{r, echo = FALSE, fig.align = 'center', out.width = "30%", fig.cap = "by @allison_horst"}
-knitr::include_graphics('../02-figures/03-dplyr.jpg')
+```{r fig dplyr, fig.align = 'center', out.width = "30%", fig.cap = "by @allison_horst"}
+knitr::include_graphics(here("03-figures", "03-dplyr.jpg"))
 ```
 
 
-```{r, echo = FALSE, fig.align = 'center', out.width = "30%", fig.cap = "by @allison_horst"}
-knitr::include_graphics('../02-figures/04-rmarkdown_wizards.png')
-```
-
-
-```{r, eval = TRUE, include = FALSE}
+```{r load tidyverse, include = FALSE}
 # install.packages("tidyverse")
 library(tidyverse)
 ```
@@ -55,8 +58,8 @@ library(tidyverse)
 
 
 ## 1| readr (read rectangular data)
-```{r, eval = TRUE, include = FALSE}
-cars_df <- read_csv("../01-data/cars.csv")
+```{r readr, include = FALSE}
+cars_df <- read_csv(here("01-data", "cars.csv"))
 ```
 <!--brief explanation of parsing-->
 
@@ -69,8 +72,7 @@ cars_df <- read_csv("../01-data/cars.csv")
 
   + Have a helpful progress bar if loading is going to take a while.
 
-```{r, eval = TRUE, include = FALSE}
-# check out the data
+```{r check out data, include = FALSE}
 glimpse(cars_df)
 head(cars_df)
 tail(cars_df)
@@ -89,7 +91,7 @@ names(cars_df)
 4. Finally show me the results
 <!--brief explanation of pipes-->
 
-```{r, eval = TRUE, include = FALSE}
+```{r pipes, eval = TRUE, include = FALSE}
 cars_cyl <- cars_df %>% 
   select(-c(disp, hp, drat)) %>% 
   filter(cyl > 4) %>% 
@@ -106,20 +108,20 @@ cars_cyl_2 <- cars_df %>%
 
 
 5. Create a new variable (column) with mutate relating the number of cylinders & miles/(US) gallon
-```{r, eval = TRUE, include = FALSE}
+```{r mutate, include = FALSE}
 cars_cyl_mpg <- cars_cyl %>% 
   mutate(mpg_cyl = mpg * cyl) 
 ```
 
 6. But wait! I'm just interested in the brand (Mercedes, Ferrari etc.) not in the model
-```{r, eval = TRUE, include = FALSE}
+```{r summarise, include = FALSE}
 cars_brand <- cars_cyl_mpg %>% 
   mutate(brand = stringr::word(X1, 1)) %>% # I introduce stringr
   summarise(mpg_cyl = mean(mpg_cyl)) # be careful with the NA's: na.rm = TRUE
 ```
 
 7. But I didn't want that!
-```{r, eval = TRUE, include = FALSE}
+```{r group_by, include = FALSE}
 cars_brand_best <- cars_cyl_mpg %>%
   mutate(brand = stringr::word(X1, 1)) %>%
   group_by(brand) %>% # combined group_by: brand, gear
@@ -130,7 +132,7 @@ cars_brand_best <- cars_cyl_mpg %>%
 
 8. Definitely Pontiac is the best brand!
 9. So add the value, ranking position and medals of the top 3 car brands
-```{r, eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r left_join}
 rank_med <- tibble(ranking = c("1 position", "2 position",
                                 "3 position"), medals = c("gold", "silver", "bronze"))
 
@@ -140,6 +142,7 @@ cars_brand_best %>%
                                 "3 position")) %>% 
   left_join(rank_med)
 ```
+
 
 ## 3| tibble (modern reimagining of the data.frame)
 + They do less than data.frames
@@ -156,7 +159,6 @@ cars_brand_best %>%
 
 
 ## 5| purrr (functional programming)
-Laura will explain next week ;)
 
 
 ## 6| stringr (string manipulation)
@@ -174,7 +176,7 @@ ggplot2 is a system for declaratively creating graphics, based on The Grammar of
 2. Tidy data
 3. Visualise putting site 1 at the end (and using pipes)
 
-```{r, eval = TRUE, echo = FALSE, fig.align = 'center', out.width = "50%"}
+```{r example core tidyverse, fig.align = 'center', out.width = "50%"}
 data_prod <- tibble( # introduce tibble
   productivity_1 = purrr::rdunif(10, 10, 100), # introduce purrr
   productivity_2 = rdunif(10, 10, 100),
@@ -228,8 +230,8 @@ tibble( # introduce tibble
   ) %>%
   mutate(sites = fct_relevel(sites, "1", after = 3)) %>% # introduce forcats  
   ggplot(aes(x = prod_year, # introduce ggplot2 
-                   y = prod_value,
-                   color = sites)) +
+             y = prod_value,
+             color = sites)) +
   geom_point() + 
   scale_color_viridis_d() +
   scale_y_continuous(expand = c(0, 0)) +
@@ -253,5 +255,52 @@ tibble( # introduce tibble
 ```
 
 
-rmarkdown::render("03-rmd/intro_tidyverse-dplyr.Rmd", output_format = "all", output_dir = "04-doc")
+```{r more advanced, eval = FALSE}
+df <- tibble( 
+  productivity_1 = purrr::rdunif(100, 10, 100), 
+  productivity_2 = rdunif(100, 10, 100),
+  productivity_3 = rdunif(100, 10, 100), 
+  sites = as.factor(rep(1:10, 10))
+  ) %>% 
+  pivot_longer(
+    cols = productivity_1 : productivity_3,
+    names_to = "prod_year",
+    values_to = "prod_value"
+  ) %>% 
+  mutate(species = rep(letters[1:10], 30))
+
+
+# functional programming (purrr)
+source(here("02-functions", "f_ggspecies_model.R"))
+ggspecies(sp.id = "a")
+vspecies <- df %>% 
+  select(species) %>% 
+  pull() %>% 
+  unique()
+gg_mult_sp <- map(vspecies, ~ggspecies(sp.id = .x))
+pdf(here("03-figures", "ggspecies.pdf"))
+gg_mult_sp %>% 
+    reduce(`+`)
+dev.off()
+
+
+# tidyr
+mod <- df %>% 
+  group_by(sites) %>% 
+  nest() %>% 
+  mutate(linear_trend = map(.f = purrr_lm, .x = data))
+
+mod %>%
+  head()
+
+# the summary of the 9th linear model fit
+mod[9,] %>% 
+  .$linear_trend %>%
+  .[[1]] %>% 
+  summary()
+
+```
+
+
+rmarkdown::render("04-rmd/intro_tidyverse-dplyr.Rmd", output_format = "all", output_dir = "05-doc")
 
