@@ -271,7 +271,7 @@ df <- tibble(
 
 
 # functional programming (purrr)
-source(here("02-functions", "f_ggspecies_model.R"))
+source(here("02-functions", "f_ggspecies.R"))
 ggspecies(sp.id = "a")
 vspecies <- df %>% 
   select(species) %>% 
@@ -285,6 +285,7 @@ dev.off()
 
 
 # tidyr
+source(here("02-functions", "f_model.R"))
 mod <- df %>% 
   group_by(sites) %>% 
   nest() %>% 
