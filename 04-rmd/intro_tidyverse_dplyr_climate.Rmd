@@ -1,0 +1,484 @@
+---
+title: "Introduction to the Tidyverse"
+author: "Julen Astigarraga & Paloma Ruiz Benito"
+date: "`r Sys.Date()`"
+output: 
+    distill::distill_article:
+        highlight: kate
+        code_folding: false  
+        toc: true     
+        toc_depth: 3
+        css: styles.css         
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, warning = FALSE, message = FALSE)
+library(here)
+library(patchwork)
+library(viridis)
+library(tidyverse)
+
+```
+
+```{r fig tidydata, fig.align = 'center', fig.cap = "by Allison Horst"}
+
+knitr::include_graphics(here("03-figures", "01-tidydata.jpg"))
+
+```
+
+In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages (<https://www.tidyverse.org/>)
+
+# Problem we are going to work with
+
+In the city council of Alcalá de Henares there are still discrepancies about the existence of anthropogenic climate change. Some parties are of the opinion that it does not exist, others think that it exists but that it is not due to anthropogenic causes and others argue that all the scientific evidence leaves no doubt that it exists and that it is due to anthropogenic causes. The parties that believe that anthropogenic climate change exists have asked you, a group of experts, to produce a report that clearly shows how the increase in CO~2~ emissions has gone hand in hand with the increase in temperature in recent decades. How would you solve this issue?
+
+-   The data could be obtained, for example, from the following information sources: Climate data for Alcalá de Henares: <https://verughub.github.io/easyclimate/index.html>
+
+-   CO~2~ emissions data for Spain: <https://edgar.jrc.ec.europa.eu/report_2020#data_download>
+
+# Download data
+
+```{r}
+
+## easyclimate
+
+# remotes::install_github("VeruGHub/easyclimate")
+
+library(easyclimate)
+
+coords <- data.frame(
+  lon = -3.35,
+  lat = 40.48
+)
+
+ggplot() +
+  borders(regions = c("Spain", "Portugal", "France")) +
+  geom_point(data = coords, aes(x = lon, y = lat)) +
+  coord_fixed(xlim = c(-10, 2), ylim = c(36, 44), ratio = 1.3) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  theme_bw()
+
+# temp <- get_daily_climate(
+#   coords,
+#   period = 1950:2020, 
+#   climatic_var = c("Tmin", "Tmax")
+#   )
+
+# save(temp, file = "00-raw/temp.RData")
+# load(here("00-raw", "temp.RData"))
+load(here("00-raw", "tmax-ona.RData"))
+load(here("00-raw", "tmin-ona.RData"))
+
+## CO2 emissions
+# here we will download the data from the webpage and read them using the tidyverse
+
+```
+
+# Tidyverse
+
+```{r fig tidyverse packages, fig.align = "center", out.width = "30%"}
+
+knitr::include_graphics(here("03-figures", "02-tidyverse-packages.png"))
+
+```
+
+> The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. --- [tidyverse](https://www.tidyverse.org/)
+
+```{r fig dplyr, fig.align = "center", out.width = "30%", fig.cap = "by Allison Horst"}
+
+knitr::include_graphics(here("03-figures", "03-dplyr.jpg"))
+
+```
+
+```{r load tidyverse, include = FALSE}
+
+# install.packages("tidyverse")
+library(tidyverse)
+
+```
+
+<!--brief explanation of conflicts-->
+
+-   Recommended book: [R for Data Science](https://r4ds.had.co.nz/) by Hadley Wickham & Garrett Grolemund
+
+-   Core tidyverse packages:
+
+    -   [readr](https://readr.tidyverse.org/): read rectangular data
+    -   [dplyr](https://dplyr.tidyverse.org/): data manipulation
+    -   [tibble](https://tibble.tidyverse.org/): modern reimagining of the data.frame
+    -   [tidyr](https://tidyr.tidyverse.org/): tidy data
+    -   [purrr](https://purrr.tidyverse.org/): functional programming
+    -   [stringr](https://stringr.tidyverse.org/): string manipulation
+    -   [forcats](https://forcats.tidyverse.org/): solve problems with factors
+    -   [ggplot2](https://ggplot2.tidyverse.org/): data visualisation
+
+## 1\| readr (read rectangular data)
+
+```{r readr, include = FALSE}
+
+co_data <- read_csv(here("01-data", "co2.csv"))
+
+```
+
+<!--brief explanation of parsing-->
+
+-   *few advantages compared to base R*
+
+    -   Use a consistent naming scheme for the parameters (e.g. col_names and col_types not header and colClasses).
+
+    -   Are much faster (up to 10x).
+
+    -   Leave strings as is by default, and automatically parse common date/time formats.
+
+    -   Have a helpful progress bar if loading is going to take a while.
+
+```{r check out data, include = FALSE}
+
+glimpse(co_data)
+head(co_data)
+tail(co_data)
+summary(co_data)
+names(co_data)
+
+glimpse(df_tmax)
+glimpse(df_tmin)
+
+```
+
+## 2\| tibble (modern reimagining of the data.frame)
+
+-   They do less than data.frames
+-   They complain more than data.frames
+
+```{r tibble vs data.frame, include = F}
+
+class(co_data)
+
+co_data_df <- as.data.frame(co_data)
+co_data_tb <- as_tibble(co_data)
+
+df_1_col <- co_data_df[1]
+tb_1_col <- co_data_tb[1]
+
+class(df_1_col)
+class(tb_1_col)
+
+# with base R data frames, [ sometimes returns a data frame, and sometimes returns a vector. With tibbles, [ always returns another tibble
+
+```
+
+## 3\| tidyr (tidy data)
+
+-   tidy data 3 characteristics:
+
+1.  Every column is a variable
+2.  Every row is an observation
+3.  Every cell is a single measurement
+
+[Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
+
+```{r tidy data, include = F}
+
+glimpse(co_data)
+glimpse(df_tmax)
+glimpse(df_tmin)
+
+co_data_l <- co_data %>% 
+  pivot_longer( # introduce tidyr 
+    cols = "1970":"2019",
+    names_to = "co_year",
+    values_to = "co_value"
+  )
+
+glimpse(co_data_l)
+
+```
+
+## 4\| dplyr (data manipulation)
+
+1.  First I'll filter data from Spain
+2.  Then I'll delete (not select) those variables that I'm not interested in <!--brief explanation of pipes-->
+
+```{r filter & select, eval = TRUE, include = FALSE}
+
+glimpse(co_data_l)
+
+co_data_l_sp <- co_data_l %>% 
+  filter(country_name == "Spain and Andorra") %>% 
+  select(!country_name)
+
+glimpse(co_data_l_sp)
+
+glimpse(df_tmax)
+glimpse(df_tmin)
+
+df_tmax_sel <- df_tmax %>% 
+  select(!c(x, y, ID_coords))
+
+df_tmin_sel <- df_tmin %>% 
+  select(!c(x, y, ID_coords))
+
+glimpse(df_tmax_sel)
+glimpse(df_tmin_sel)
+
+```
+
+5.  Create a new variable (column) with mutate to get average temperature data
+
+```{r mutate, include = FALSE}
+
+# delete
+daily <- df_tmax_sel %>%
+  full_join(df_tmin_sel) %>% 
+  mutate(
+    across(c(Tmax, Tmin), function(x){x / 100})
+  )
+
+daily_tmean <- daily %>%
+  mutate(
+    Tmean = (Tmin + Tmax) / 2,
+    date = as.Date(date),
+    month = format(date, format = "%m"),
+    year = format(date, format = "%Y")
+  )
+
+```
+
+6.  But wait! I'm just interested in yearly data not daily data
+
+```{r group_by & summarise, include = FALSE}
+
+glimpse(co_data_l_sp)
+glimpse(daily_tmean)
+
+yearly <- daily_tmean %>% 
+  group_by(year) %>% 
+  summarise(
+    Tmean.year = mean(Tmean)
+    )
+
+glimpse(yearly)
+
+```
+
+7.  Join both datasets and review what we have learned so far
+
+```{r join, include = FALSE}
+
+co_temp <- full_join(
+  co_data_l_sp, yearly, by = c("co_year" = "year")
+)
+
+glimpse(co_temp)
+
+co_temp_all <- co_temp %>% 
+  mutate(
+    co_value = as.numeric(co_value),
+    co_year = as.numeric(co_year),
+  ) %>% 
+  group_by(co_year) %>% 
+  summarise(
+    co_all = sum(co_value),
+    Tmean.year = first(Tmean.year)
+  )
+
+glimpse(co_temp_all)
+
+```
+
+## 5\| ggplot (data visualisation)
+
+ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+
+1.  Visualise the relationship betweeen CO^2^ value and years
+2.  Visualise the relationship betweeen average temperature and years
+3.  Visualise the relationship betweeen CO^2^ value and average temperature
+
+```{r ggplot}
+
+gg_ye_co <- ggplot(co_temp_all, aes(x = co_year, y = co_all,
+                                    color = co_year
+                                    )) +
+  geom_line() +
+  geom_smooth(method = "lm")
+
+gg_ye_temp <- ggplot(co_temp_all, aes(x = co_year, y = Tmean.year,
+                                      color = co_year
+                                      )) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+gg_co_temp <- ggplot(co_temp_all, aes(x = co_all, y = Tmean.year)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+(gg_ye_co + gg_ye_temp) / gg_co_temp
+
+co_temp <- co_temp %>% 
+  mutate(
+    co_value = as.numeric(co_value),
+    co_year = as.numeric(co_year),
+  )
+
+```
+
+## 6\| stringr (string manipulation)
+
+A cohesive set of functions designed to make working with strings as easy as possible
+
+## 7\| forcats (solve problems with factors)
+
+1.  Detect all sectors starting with the word "Other"
+2.  
+
+```{r stringr & forcats}
+
+gg_ye_co_sec <- co_temp %>% 
+  drop_na(Sector) %>% 
+  ggplot(aes(x = co_year, y = co_value, color = Sector)) +
+  geom_line()
+
+co_temp_fs <- co_temp %>% 
+  mutate(
+    # other = str_detect(Sector, "Other") # stringr
+    Sector = fct_relevel(Sector, "Other industrial combustion", after = Inf), # forcats
+    Sector = fct_relevel(Sector, "Other sectors", after = Inf)
+    )
+
+gg_ye_co_sec <- co_temp_fs %>% 
+  drop_na(Sector) %>% 
+  ggplot(aes(x = co_year, y = co_value, color = Sector)) +
+  geom_line()
+
+# introduce stringr y forcats aqui
+
+(gg_ye_co + gg_ye_co_sec) /
+  (gg_ye_temp + gg_co_temp)
+
+```
+
+## 8\| purrr (functional programming)
+
+1.  Create a function to add a theme to a ggplot
+2.  Apply this function to all ggplots at once
+
+```{r purrr}
+
+gg_theme <- function(gg, units, title){
+  gg +
+    geom_smooth(method = "lm", color = "firebrick", size = 1.3) +
+    geom_point(alpha = .5) +
+    scale_y_continuous(labels = function(x){paste0(x, units)}) +
+    scale_color_viridis_c(option = "turbo", direction = -1, name = NULL,
+                          breaks = seq(1950, 2020, 10)) +
+    guides(color = guide_colorsteps(barwidth = unit(30, "lines"),
+                                    barheight = unit(.4, "lines"))) +
+    labs(y = NULL, x = NULL,
+         title = title) +
+    theme(
+      panel.grid.major = element_line(colour = "grey90", size = 0.5),
+      panel.background = element_blank(),
+      panel.grid.minor = element_blank(),
+      legend.position = "top",
+      legend.title = element_text(size = 14, color = "grey20"),
+      legend.text = element_text(size = 12, color = "grey50"),
+      plot.title = element_text(size = 22, margin = margin(b = 15)),
+      plot.subtitle = element_text(size = 14, margin = margin(b = 15)),
+      plot.caption = element_text(size = 14, color = "grey50", margin = margin(t = 25)),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      axis.text = element_text(size = 14),
+      axis.line.x = element_line(color = "grey20"),
+      axis.ticks.x = element_line(color = "grey20"),
+      plot.margin = margin(20, 20, 10, 20)
+      )
+}
+
+gg_ye_temp_th <- gg_theme(
+  gg = gg_ye_temp,
+  units = "°C",
+  title = "Annual mean temperature"
+)
+
+gg_ye_co_th <- gg_theme(
+  gg = gg_ye_co,
+  units = " Mt CO2/yr",
+  title = bquote(Annual~CO[2]~emissions)
+)
+
+gg_co_temp_th <- gg_theme(
+  gg = gg_co_temp,
+  units = "°C",
+  title = bquote(
+    Annual~mean~temperature~vs~Annual~CO[2]~emissions
+    )
+) +
+  scale_x_continuous(labels = function(x){paste0(x, " Mt CO2/yr")})
+
+arg_3 <- list(
+  gg =list(gg_ye_co, gg_ye_temp, gg_co_temp),
+  units = c("°C", "Mt CO2/yr", "°C"),
+  title = c(
+    "Annual mean temperature",
+    "Annual CO2 emissions",
+    "Annual mean temperature vs Annual CO2 emissions"
+  )
+  )
+
+arg_3 %>% 
+  pmap(gg_theme) %>% 
+  reduce(`/`)
+
+gg_ye_co_sec_th <- gg_ye_co_sec +
+    geom_point(alpha = .5) +
+    scale_y_continuous(labels = function(x){paste0(x, " Mt CO2/yr")}) +
+    labs(y = NULL, x = NULL,
+         title = bquote(Annual~CO[2]~emissions~by~sectors)) +
+    theme(
+      panel.grid.major = element_line(colour = "grey90", size = 0.5),
+      panel.background = element_blank(),
+      panel.grid.minor = element_blank(),
+      legend.key = element_blank(),
+      legend.position = "top",
+      legend.title = element_text(size = 14, color = "grey20"),
+      legend.text = element_text(size = 12, color = "grey50"),
+      plot.title = element_text(size = 22, margin = margin(b = 15)),
+      plot.subtitle = element_text(size = 14, margin = margin(b = 15)),
+      plot.caption = element_text(size = 14, color = "grey50", margin = margin(t = 25)),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      axis.text = element_text(size = 14),
+      axis.line.x = element_line(color = "grey20"),
+      axis.ticks.x = element_line(color = "grey20"),
+      plot.margin = margin(20, 20, 10, 20)
+      )
+
+final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
+  (gg_ye_temp_th + gg_co_temp_th) +
+  plot_annotation(
+    title = expression(paste("Annual mean temperature and "~CO[2], " missions relationship over the years in Oñati, Gipuzkoa (1950-2017)")),
+      # "Annual mean temperature and CO2 emissions relationship over the years in Oñati, Gipuzkoa (1950-2017)",
+    caption = "   Data source:
+      -Moreno A, Hasenauer H (2016). “Spatial downscaling of European climate data” International Journal of Climatology, 1444–1458.
+      -Rammer W, Pucher C, Neumann M (2018). Description, Evaluation and Validation of Downscaled Daily Climate Data Version 2.
+      -Cruz-Alonso V, Rodríguez-Sánchez F, Pucher C, Ratcliffe S, Astigarraga J, Neumann M, Ruiz-Benito P (2021). easyclimate: Easy access to high-resolution daily climate data for Europe.
+      -Crippa M, Guizzardi D, Muntean M, Schaaf E, Solazzo E, Monforti-Ferrario F, Olivier JGJ, Vignati E, Fossil CO2 emissions of all world countries - 2020 Report, EUR 30358 EN,
+       Publications Office of the European Union, Luxembourg, 2020.
+    Graphic: Students and teachers of **Ciencia de Datos Práctica: Resolución de Problemas Ambientales Mediante Proyectos (Universidad de Alcalá)** course",
+    theme = theme(
+      plot.title = element_text(size = 24, face = "bold"),
+      plot.caption = element_text(hjust = 0, size = 14, color = "grey50", margin = margin(t = 25))
+      )
+    )
+
+ggsave(
+  plot = final_plot,
+  here("03-figures", "onati_co2_temp.png"),
+  width = 20, height = 14
+)
+
+```
