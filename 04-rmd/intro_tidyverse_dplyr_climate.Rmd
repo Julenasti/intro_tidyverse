@@ -19,7 +19,6 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE, warning = FALSE, message = FALS
 library(here)
 library(patchwork)
 library(viridis)
-library(tidyverse)
 
 ```
 
@@ -460,8 +459,7 @@ gg_ye_co_sec_th <- gg_ye_co_sec +
 final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
   (gg_ye_temp_th + gg_co_temp_th) +
   plot_annotation(
-    title = expression(paste("Annual mean temperature and "~CO[2], " missions relationship over the years in Oñati, Gipuzkoa (1950-2017)")),
-      # "Annual mean temperature and CO2 emissions relationship over the years in Oñati, Gipuzkoa (1950-2017)",
+    title = expression(paste("Annual mean temperature and "~CO[2], " emissions relationship over the years in Oñati, Gipuzkoa (1950-2017)")),
     caption = "   Data source:
       -Moreno A, Hasenauer H (2016). “Spatial downscaling of European climate data” International Journal of Climatology, 1444–1458.
       -Rammer W, Pucher C, Neumann M (2018). Description, Evaluation and Validation of Downscaled Daily Climate Data Version 2.
