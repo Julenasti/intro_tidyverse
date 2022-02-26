@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE, warning = FALSE, message = FALS
 library(here)
 library(patchwork)
 library(viridis)
+library(ggpmisc)
 
 ```
 
@@ -69,11 +70,6 @@ ggplot() +
 
 # save(temp, file = "00-raw/temp.RData")
 # load(here("00-raw", "temp.RData"))
-load(here("00-raw", "tmax-ona.RData"))
-load(here("00-raw", "tmin-ona.RData"))
-
-## CO2 emissions
-# here we will download the data from the webpage and read them using the tidyverse
 
 ```
 
@@ -120,6 +116,7 @@ library(tidyverse)
 ```{r readr, include = FALSE}
 
 co_data <- read_csv(here("01-data", "co2.csv"))
+temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
 
 ```
 
@@ -143,8 +140,7 @@ tail(co_data)
 summary(co_data)
 names(co_data)
 
-glimpse(df_tmax)
-glimpse(df_tmin)
+glimpse(temp)
 
 ```
 
@@ -183,8 +179,7 @@ class(tb_1_col)
 ```{r tidy data, include = F}
 
 glimpse(co_data)
-glimpse(df_tmax)
-glimpse(df_tmin)
+glimpse(temp)
 
 co_data_l <- co_data %>% 
   pivot_longer( # introduce tidyr 
@@ -212,32 +207,20 @@ co_data_l_sp <- co_data_l %>%
 
 glimpse(co_data_l_sp)
 
-glimpse(df_tmax)
-glimpse(df_tmin)
+glimpse(temp)
 
-df_tmax_sel <- df_tmax %>% 
-  select(!c(x, y, ID_coords))
+temp_sel <- temp %>% 
+  select(!c(ID_coords))
 
-df_tmin_sel <- df_tmin %>% 
-  select(!c(x, y, ID_coords))
-
-glimpse(df_tmax_sel)
-glimpse(df_tmin_sel)
+glimpse(temp_sel)
 
 ```
 
-5.  Create a new variable (column) with mutate to get average temperature data
+5.  Create a new variable (column) with mutate to get mean temperature data
 
 ```{r mutate, include = FALSE}
 
-# delete
-daily <- df_tmax_sel %>%
-  full_join(df_tmin_sel) %>% 
-  mutate(
-    across(c(Tmax, Tmin), function(x){x / 100})
-  )
-
-daily_tmean <- daily %>%
+daily_tmean <- temp_sel %>%
   mutate(
     Tmean = (Tmin + Tmax) / 2,
     date = as.Date(date),
@@ -294,8 +277,8 @@ glimpse(co_temp_all)
 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
 1.  Visualise the relationship betweeen CO^2^ value and years
-2.  Visualise the relationship betweeen average temperature and years
-3.  Visualise the relationship betweeen CO^2^ value and average temperature
+2.  Visualise the relationship betweeen mean temperature and years
+3.  Visualise the relationship betweeen CO^2^ value and mean temperature
 
 ```{r ggplot}
 
@@ -332,7 +315,7 @@ A cohesive set of functions designed to make working with strings as easy as pos
 ## 7\| forcats (solve problems with factors)
 
 1.  Detect all sectors starting with the word "Other"
-2.  
+2.  Put the sectors beginning with "Other" at the end of the legend
 
 ```{r stringr & forcats}
 
@@ -370,6 +353,17 @@ gg_ye_co_sec <- co_temp_fs %>%
 gg_theme <- function(gg, units, title){
   gg +
     geom_smooth(method = "lm", color = "firebrick", size = 1.3) +
+    stat_fit_glance(
+        method = "lm",
+        label.x = "left",
+        label.y = "top",
+        method.args = list(formula = y ~ x),
+        mapping = aes(
+          label = sprintf('r^2~"="~%.3f~~italic(P)~"="~%.2g',
+                          after_stat(r.squared), after_stat(p.value))
+        ),
+        parse = TRUE
+      ) +
     geom_point(alpha = .5) +
     scale_y_continuous(labels = function(x){paste0(x, units)}) +
     scale_color_viridis_c(option = "turbo", direction = -1, name = NULL,
@@ -459,7 +453,7 @@ gg_ye_co_sec_th <- gg_ye_co_sec +
 final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
   (gg_ye_temp_th + gg_co_temp_th) +
   plot_annotation(
-    title = expression(paste("Annual mean temperature and "~CO[2], " emissions relationship over the years in Oñati, Gipuzkoa (1950-2017)")),
+    title = expression(paste("Annual mean temperature and "~CO[2], " emissions relationship over the years in Alcalá de Henares, Madrid (1950-2020)")),
     caption = "   Data source:
       -Moreno A, Hasenauer H (2016). “Spatial downscaling of European climate data” International Journal of Climatology, 1444–1458.
       -Rammer W, Pucher C, Neumann M (2018). Description, Evaluation and Validation of Downscaled Daily Climate Data Version 2.
@@ -475,7 +469,7 @@ final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
 
 ggsave(
   plot = final_plot,
-  here("03-figures", "onati_co2_temp.png"),
+  here("03-figures", "alcala_co2_temp.png"),
   width = 20, height = 14
 )
 
