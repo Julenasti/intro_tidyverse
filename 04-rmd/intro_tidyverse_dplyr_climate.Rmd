@@ -113,6 +113,8 @@ library(tidyverse)
 
 ## 1\| readr (read rectangular data)
 
+1.  Read CO~2~ and temperature data
+
 ```{r readr, include = FALSE}
 
 co_data <- read_csv(here("01-data", "co2.csv"))
@@ -176,6 +178,8 @@ class(tb_1_col)
 
 [Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
 
+1.  Change CO~2~ yearly data to long format
+
 ```{r tidy data, include = F}
 
 glimpse(co_data)
@@ -194,8 +198,8 @@ glimpse(co_data_l)
 
 ## 4\| dplyr (data manipulation)
 
-1.  First I'll filter data from Spain
-2.  Then I'll delete (not select) those variables that I'm not interested in <!--brief explanation of pipes-->
+1.  Filter data from Spain
+2.  Delete (not select) those variables that you're not interested in <!--brief explanation of pipes-->
 
 ```{r filter & select, eval = TRUE, include = FALSE}
 
@@ -216,7 +220,7 @@ glimpse(temp_sel)
 
 ```
 
-5.  Create a new variable (column) with mutate to get mean temperature data
+3.  Create a new variable (column) with mutate to get mean temperature data
 
 ```{r mutate, include = FALSE}
 
@@ -230,7 +234,7 @@ daily_tmean <- temp_sel %>%
 
 ```
 
-6.  But wait! I'm just interested in yearly data not daily data
+4.  But wait! We're just interested in yearly data not daily data
 
 ```{r group_by & summarise, include = FALSE}
 
@@ -247,7 +251,7 @@ glimpse(yearly)
 
 ```
 
-7.  Join both datasets and review what we have learned so far
+5.  Join both datasets and review what we have learned so far
 
 ```{r join, include = FALSE}
 
@@ -276,9 +280,9 @@ glimpse(co_temp_all)
 
 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
-1.  Visualise the relationship betweeen CO^2^ value and years
+1.  Visualise the relationship betweeen CO~2~ value and years
 2.  Visualise the relationship betweeen mean temperature and years
-3.  Visualise the relationship betweeen CO^2^ value and mean temperature
+3.  Visualise the relationship betweeen CO~2~ value and mean temperature
 
 ```{r ggplot}
 
