@@ -115,8 +115,7 @@ library(tidyverse)
 
 ```{r readr, include = FALSE}
 
-co_data <- read_csv(here("01-data", "co2.csv"))
-temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
+
 
 ```
 
@@ -134,13 +133,7 @@ temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
 
 ```{r check out data, include = FALSE}
 
-glimpse(co_data)
-head(co_data)
-tail(co_data)
-summary(co_data)
-names(co_data)
 
-glimpse(temp)
 
 ```
 
@@ -151,18 +144,7 @@ glimpse(temp)
 
 ```{r tibble vs data.frame, include = F}
 
-class(co_data)
 
-co_data_df <- as.data.frame(co_data)
-co_data_tb <- as_tibble(co_data)
-
-df_1_col <- co_data_df[1]
-tb_1_col <- co_data_tb[1]
-
-class(df_1_col)
-class(tb_1_col)
-
-# with base R data frames, [ sometimes returns a data frame, and sometimes returns a vector. With tibbles, [ always returns another tibble
 
 ```
 
@@ -178,97 +160,33 @@ class(tb_1_col)
 
 ```{r tidy data, include = F}
 
-glimpse(co_data)
-glimpse(temp)
 
-co_data_l <- co_data %>% 
-  pivot_longer( # introduce tidyr 
-    cols = "1970":"2019",
-    names_to = "co_year",
-    values_to = "co_value"
-  )
-
-glimpse(co_data_l)
 
 ```
 
 ## 4\| dplyr (data manipulation)
 
-1.  First I'll filter data from Spain
-2.  Then I'll delete (not select) those variables that I'm not interested in <!--brief explanation of pipes-->
-
 ```{r filter & select, eval = TRUE, include = FALSE}
 
-glimpse(co_data_l)
 
-co_data_l_sp <- co_data_l %>% 
-  filter(country_name == "Spain and Andorra") %>% 
-  select(!country_name)
-
-glimpse(co_data_l_sp)
-
-glimpse(temp)
-
-temp_sel <- temp %>% 
-  select(!c(ID_coords))
-
-glimpse(temp_sel)
 
 ```
-
-5.  Create a new variable (column) with mutate to get mean temperature data
 
 ```{r mutate, include = FALSE}
 
-daily_tmean <- temp_sel %>%
-  mutate(
-    Tmean = (Tmin + Tmax) / 2,
-    date = as.Date(date),
-    month = format(date, format = "%m"),
-    year = format(date, format = "%Y")
-  )
+
 
 ```
-
-6.  But wait! I'm just interested in yearly data not daily data
 
 ```{r group_by & summarise, include = FALSE}
 
-glimpse(co_data_l_sp)
-glimpse(daily_tmean)
 
-yearly <- daily_tmean %>% 
-  group_by(year) %>% 
-  summarise(
-    Tmean.year = mean(Tmean)
-    )
-
-glimpse(yearly)
 
 ```
 
-7.  Join both datasets and review what we have learned so far
-
 ```{r join, include = FALSE}
 
-co_temp <- full_join(
-  co_data_l_sp, yearly, by = c("co_year" = "year")
-)
 
-glimpse(co_temp)
-
-co_temp_all <- co_temp %>% 
-  mutate(
-    co_value = as.numeric(co_value),
-    co_year = as.numeric(co_year),
-  ) %>% 
-  group_by(co_year) %>% 
-  summarise(
-    co_all = sum(co_value),
-    Tmean.year = first(Tmean.year)
-  )
-
-glimpse(co_temp_all)
 
 ```
 
@@ -276,35 +194,9 @@ glimpse(co_temp_all)
 
 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
-1.  Visualise the relationship betweeen CO^2^ value and years
-2.  Visualise the relationship betweeen mean temperature and years
-3.  Visualise the relationship betweeen CO^2^ value and mean temperature
-
 ```{r ggplot}
 
-gg_ye_co <- ggplot(co_temp_all, aes(x = co_year, y = co_all,
-                                    color = co_year
-                                    )) +
-  geom_line() +
-  geom_smooth(method = "lm")
 
-gg_ye_temp <- ggplot(co_temp_all, aes(x = co_year, y = Tmean.year,
-                                      color = co_year
-                                      )) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-gg_co_temp <- ggplot(co_temp_all, aes(x = co_all, y = Tmean.year)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-(gg_ye_co + gg_ye_temp) / gg_co_temp
-
-co_temp <- co_temp %>% 
-  mutate(
-    co_value = as.numeric(co_value),
-    co_year = as.numeric(co_year),
-  )
 
 ```
 
@@ -314,39 +206,13 @@ A cohesive set of functions designed to make working with strings as easy as pos
 
 ## 7\| forcats (solve problems with factors)
 
-1.  Detect all sectors starting with the word "Other"
-2.  Put the sectors beginning with "Other" at the end of the legend
-
 ```{r stringr & forcats}
 
-gg_ye_co_sec <- co_temp %>% 
-  drop_na(Sector) %>% 
-  ggplot(aes(x = co_year, y = co_value, color = Sector)) +
-  geom_line()
 
-co_temp_fs <- co_temp %>% 
-  mutate(
-    # other = str_detect(Sector, "Other") # stringr
-    Sector = fct_relevel(Sector, "Other industrial combustion", after = Inf), # forcats
-    Sector = fct_relevel(Sector, "Other sectors", after = Inf)
-    )
-
-gg_ye_co_sec <- co_temp_fs %>% 
-  drop_na(Sector) %>% 
-  ggplot(aes(x = co_year, y = co_value, color = Sector)) +
-  geom_line()
-
-# introduce stringr y forcats aqui
-
-(gg_ye_co + gg_ye_co_sec) /
-  (gg_ye_temp + gg_co_temp)
 
 ```
 
 ## 8\| purrr (functional programming)
-
-1.  Create a function to add a theme to a ggplot
-2.  Apply this function to all ggplots at once
 
 ```{r purrr}
 
