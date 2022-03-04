@@ -10,7 +10,7 @@ output:
         toc_depth: 3
         css: styles.css         
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include = FALSE}
@@ -41,7 +41,7 @@ In the city council of Alcalá de Henares there are still discrepancies about th
 
 # Download data
 
-```{r}
+```{r easyclimate}
 
 ## easyclimate
 
@@ -89,7 +89,7 @@ knitr::include_graphics(here("03-figures", "03-dplyr.jpg"))
 
 ```
 
-```{r load tidyverse, include = FALSE}
+```{r load tidyverse}
 
 # install.packages("tidyverse")
 library(tidyverse)
@@ -113,7 +113,7 @@ library(tidyverse)
 
 ## 1\| readr (read rectangular data)
 
-```{r readr, include = FALSE}
+```{r readr}
 
 
 
@@ -131,7 +131,7 @@ library(tidyverse)
 
     -   Have a helpful progress bar if loading is going to take a while.
 
-```{r check out data, include = FALSE}
+```{r check out data}
 
 
 
@@ -142,7 +142,7 @@ library(tidyverse)
 -   They do less than data.frames
 -   They complain more than data.frames
 
-```{r tibble vs data.frame, include = F}
+```{r tibble vs data.frame}
 
 
 
@@ -158,7 +158,7 @@ library(tidyverse)
 
 [Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
 
-```{r tidy data, include = F}
+```{r tidy data}
 
 
 
@@ -166,25 +166,25 @@ library(tidyverse)
 
 ## 4\| dplyr (data manipulation)
 
-```{r filter & select, eval = TRUE, include = FALSE}
+```{r filter & select}
 
 
 
 ```
 
-```{r mutate, include = FALSE}
+```{r mutate}
 
 
 
 ```
 
-```{r group_by & summarise, include = FALSE}
+```{r group_by & summarise}
 
 
 
 ```
 
-```{r join, include = FALSE}
+```{r join}
 
 
 

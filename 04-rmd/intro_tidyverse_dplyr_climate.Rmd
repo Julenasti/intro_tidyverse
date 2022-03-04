@@ -15,7 +15,7 @@ editor_options:
 
 ```{r setup, include = FALSE}
 
-knitr::opts_chunk$set(echo = FALSE, eval = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE)
 library(here)
 library(patchwork)
 library(viridis)
@@ -41,7 +41,7 @@ In the city council of Alcalá de Henares there are still discrepancies about th
 
 # Download data
 
-```{r}
+```{r easyclimate}
 
 ## easyclimate
 
@@ -89,7 +89,7 @@ knitr::include_graphics(here("03-figures", "03-dplyr.jpg"))
 
 ```
 
-```{r load tidyverse, include = FALSE}
+```{r load tidyverse}
 
 # install.packages("tidyverse")
 library(tidyverse)
@@ -115,7 +115,7 @@ library(tidyverse)
 
 1.  Read CO~2~ and temperature data
 
-```{r readr, include = FALSE}
+```{r readr}
 
 co_data <- read_csv(here("01-data", "co2.csv"))
 temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
@@ -134,7 +134,7 @@ temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
 
     -   Have a helpful progress bar if loading is going to take a while.
 
-```{r check out data, include = FALSE}
+```{r check out data}
 
 glimpse(co_data)
 head(co_data)
@@ -151,7 +151,7 @@ glimpse(temp)
 -   They do less than data.frames
 -   They complain more than data.frames
 
-```{r tibble vs data.frame, include = F}
+```{r tibble vs data.frame}
 
 class(co_data)
 
@@ -180,7 +180,7 @@ class(tb_1_col)
 
 1.  Change CO~2~ yearly data to long format
 
-```{r tidy data, include = F}
+```{r tidy data}
 
 glimpse(co_data)
 glimpse(temp)
@@ -201,7 +201,7 @@ glimpse(co_data_l)
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in <!--brief explanation of pipes-->
 
-```{r filter & select, eval = TRUE, include = FALSE}
+```{r filter & select}
 
 glimpse(co_data_l)
 
@@ -222,7 +222,7 @@ glimpse(temp_sel)
 
 3.  Create a new variable (column) with mutate to get mean temperature data
 
-```{r mutate, include = FALSE}
+```{r mutate}
 
 daily_tmean <- temp_sel %>%
   mutate(
@@ -236,7 +236,7 @@ daily_tmean <- temp_sel %>%
 
 4.  But wait! We're just interested in yearly data not daily data
 
-```{r group_by & summarise, include = FALSE}
+```{r group_by & summarise}
 
 glimpse(co_data_l_sp)
 glimpse(daily_tmean)
@@ -253,7 +253,7 @@ glimpse(yearly)
 
 5.  Join both datasets and review what we have learned so far
 
-```{r join, include = FALSE}
+```{r join}
 
 co_temp <- full_join(
   co_data_l_sp, yearly, by = c("co_year" = "year")
@@ -339,8 +339,6 @@ gg_ye_co_sec <- co_temp_fs %>%
   drop_na(Sector) %>% 
   ggplot(aes(x = co_year, y = co_value, color = Sector)) +
   geom_line()
-
-# introduce stringr y forcats aqui
 
 (gg_ye_co + gg_ye_co_sec) /
   (gg_ye_temp + gg_co_temp)
