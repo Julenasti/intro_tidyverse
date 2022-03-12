@@ -158,13 +158,21 @@ class(co_data)
 co_data_df <- as.data.frame(co_data)
 co_data_tb <- as_tibble(co_data)
 
+# tibbles output help more in the interpretation of results
+co_data_df
+co_data_tb
+
 df_1_col <- co_data_df[1]
 tb_1_col <- co_data_tb[1]
 
-class(df_1_col)
-class(tb_1_col)
-
 # with base R data frames, [ sometimes returns a data frame, and sometimes returns a vector. With tibbles, [ always returns another tibble
+
+class(df_1_col[, 1])
+class(tb_1_col[, 1])
+
+# tibbles never do partial matching
+df_1_col$Secto
+tb_1_col$Secto
 
 ```
 
