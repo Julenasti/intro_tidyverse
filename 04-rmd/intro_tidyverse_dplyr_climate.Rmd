@@ -369,7 +369,7 @@ gg_theme <- function(gg, units, title){
         label.y = "top",
         method.args = list(formula = y ~ x),
         mapping = aes(
-          label = sprintf('r^2~"="~%.3f~~italic(P)~"="~%.2g',
+          label = sprintf('italic(R^2)~"="~%.3f~~italic(P)~"="~%.2g',
                           after_stat(r.squared), after_stat(p.value))
         ),
         parse = TRUE
@@ -483,4 +483,4 @@ ggsave(
   width = 20, height = 14
 )
 
-```
+``
