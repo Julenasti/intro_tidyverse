@@ -1,8 +1,9 @@
 ---
-title: "Anthropogenic climate change: a case study of Alcalá de Henares"
+title: 'Anthropogenic climate change: a case study of Alcalá de Henares'
 author: "Julen Astigarraga, Ignacio Morales-Castilla, Darío San Segundo & Paloma Ruiz-Benito"
 date: "`r Sys.Date()`"
 output:
+  pdf_document: default
   word_document:
     reference_docx: docx_template.docx
 bibliography: references.bib
@@ -20,6 +21,8 @@ library(here)
 library(patchwork)
 library(viridis)
 library(ggpmisc)
+library(gt)
+library(fs)
 
 ```
 
@@ -57,6 +60,10 @@ coords <- data.frame(
 
 co_data <- read_csv(here("01-data", "co2.csv"))
 temp <- read_delim(here("01-data", "temalcala.csv"), delim = ";")
+
+# source(here("02-functions", "f_read_data.R"))
+# 
+# all_files <- read_all_csv(path = "01-data")
 
 ```
 
@@ -138,7 +145,7 @@ gg_ye_co_sec <- co_temp %>%
 
 co_temp_fs <- co_temp %>% 
   mutate(
-    # other = str_detect(Sector, "Other") # stringr
+    # other = str_detect(Sector, "Other")
     Sector = fct_relevel(Sector, "Other industrial combustion", after = Inf),
     Sector = fct_relevel(Sector, "Other sectors", after = Inf)
     )
@@ -188,27 +195,6 @@ gg_theme <- function(gg, units, title){
       plot.margin = margin(20, 20, 10, 20)
       )
 }
-
-# gg_ye_temp_th <- gg_theme(
-#   gg = gg_ye_temp,
-#   units = "°C",
-#   title = "Annual mean temperature"
-# )
-# 
-# gg_ye_co_th <- gg_theme(
-#   gg = gg_ye_co,
-#   units = " Mt CO2/yr",
-#   title = bquote(Annual~CO[2]~emissions)
-# )
-# 
-# gg_co_temp_th <- gg_theme(
-#   gg = gg_co_temp,
-#   units = "°C",
-#   title = bquote(
-#     Annual~mean~temperature~vs~Annual~CO[2]~emissions
-#     )
-# ) +
-#   scale_x_continuous(labels = function(x){paste0(x, " Mt CO2/yr")})
 
 arg_3 <- list(
   gg =list(gg_ye_co, gg_ye_temp, gg_co_temp),
@@ -271,7 +257,7 @@ final_plot
 
 # Main results
 
-In agreement with @ipcc2021 we found that there is no doubt that climate change exists and that humans are the main cause of it.
+The correlation between warming and CO~2~ increase is of `r round(cor(co_temp_all$co_all, co_temp_all$Tmean.year, use = "complete.obs"), 2)`. Thus, in agreement with @ipcc2021 we found that there is no doubt that climate change exists and that humans are the main cause of it.
 
 ::: {custom-style="align_right"}
 Ciencia de Datos Práctica: Resolución de Problemas Ambientales Mediante Proyectos (Universidad de Alcalá)
@@ -283,3 +269,124 @@ Ciencia de Datos Práctica: Resolución de Problemas Ambientales Mediante Proyec
 :::
 
 # Appendix
+
+# Appendix 1. Data used
+
+**Table A1.** An example of a table using annual CO~2~ emissions and mean temperature data
+
+```{r table}
+
+# https://gt.rstudio.com/
+# https://ardata-fr.github.io/flextable-book/
+
+table_A1 <- co_temp_all %>% 
+  gt(rowname_col = "co_year") %>%
+  fmt_number(
+    columns = c(co_all, Tmean.year),
+    decimals = 1
+  ) %>% 
+  cols_label(
+    co_year = "Evolutionary history (°C)",
+    co_all = "CO2 emissions (Mt CO2/yr)",
+    Tmean.year = "Mean temperature"
+  ) %>% 
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = list(
+      cells_column_labels(gt::everything())
+    )
+  )  %>%
+  cols_align(
+    align = "center",
+    columns = gt::everything()
+  )
+
+gtsave(table_A1, "table_A1.rtf", path = here("05-doc"))
+
+```
+
+# Appendix 2. R Markdown
+
+-   R Markdown (<https://rmarkdown.rstudio.com>)
+
+-   Git (<https://git-scm.com/>)
+
+-   GitHub (<https://github.com/>)
+
+-   Problemas comunes:
+
+    \- Sobreescritura de un archivo
+
+    \- Versiones finales infinitas
+
+    ![](images/FINALdoc.png)\
+
+    \- Trabajo por error en una versión que no era la final
+
+    \- Creación de copias "en conflicto" cuando dos personas trabajan a la vez
+
+    \- Ediciones sin control de cambios
+
+## [Qué es R Markdown](https://rmarkdown.rstudio.com)
+
+-   R Markdown es un formato de archivo para crear documentos dinámicos con R
+
+-   Escrito en markdown y contiene partes de código de R (o algún otro lenguaje de programación) integrado
+
+-   Fue diseñado para facilitar la reproducibilidad
+
+-   Se apoya en knitr (<https://yihui.org/knitr/>) y Pandoc (<https://pandoc.org/>)
+
+-   Otras razones para trabajar en R Markdown: aumento de la eficiencia de trabajo (a medio-largo plazo), producción de documentos de alta calidad, etc.
+
+## Fundamentos básicos de R Markdown
+
+Para crear un archivo R Markdown: File -> New File -> R Markdown. Estos archivos tienen 3 componentes principales: (i) metadatos, (ii) texto, (iii) código
+
+-   Metadatos: se escribe entre `` `---` `` (al comienzo del archivo). Utiliza la sintaxis de [YAML](https://en.wikipedia.org/wiki/YAML). La sangría es importante!
+
+-   Texto: sintaxis Markdown
+
+-   2 tipos de código:
+
+    -   Code chunk (trozo de código): se escribe entre ```` ```{r}``` ````; `r` indica el lenguaje (atajo: `Ctrl + Alt + I`)
+
+    -   Inline (en línea): se escribe entre `` `r` ``
+
+Para compilar un archivo R Markdown se utiliza el botón de "*Knit*" de RStudio (atajo: `Ctrl + Shift + K`). También se puede hacer mediante código: rmarkdown::render("intro_repro.Rmd", output_dir = "output")
+
+Para buscar ayuda: Help -> Markdown Quick Reference (italics, bold, headers, lists, links, images, R codes, tables, page break, superscripts...)
+
+**negrita**, *cursiva*, subíndice~1~, superíndice^2^, codes, [hypervínculo](https://bookdown.org/yihui/rmarkdown/markdown-syntax.html), notas al pie[^1]
+
+[^1]: hello world
+
+Títulos (\# primer nivel; ## segundo nivel...), listas y sublistas (\*, -, +),
+
+> "R Markdown es maravilloso"
+>
+> --- Julen Astigarraga
+
+$f(how) = {do \choose you} feel^{excellent} (1-p)^{n-k}$
+
+<!--# esto es un comentario -->
+
+`r emo::ji("voltage")` Cambia al **Visual markdown editing mode** mediante el botón del compás
+
+Para analizar las múltiples opciones de chunk (`Ctrl + Alt + I`): (<https://bookdown.org/yihui/rmarkdown/r-code.html>)
+
+[Formatos de salida](https://bookdown.org/yihui/rmarkdown/output-formats.html)
+
+-   [documento word](https://bookdown.org/yihui/rmarkdown/word-document.html)
+
+-   [documento pdf](https://bookdown.org/yihui/rmarkdown/pdf-document.html):
+
+    -   [TinyTeX](https://yihui.name/tinytex/) (for R users who have not installed LaTeX before)
+
+## Para más información
+
+-   [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+
+-   [RStudio Cheat Sheets](https://rstudio.com/resources/cheatsheets/)
