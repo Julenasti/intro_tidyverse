@@ -23,6 +23,8 @@ library(viridis)
 library(ggpmisc)
 library(gt)
 library(fs)
+# devtools::install_github("hadley/emo")
+library(emo)
 
 ```
 
