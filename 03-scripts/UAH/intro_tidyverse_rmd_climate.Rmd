@@ -255,6 +255,12 @@ final_plot <- (purrr_plots[[1]] + gg_ye_co_sec_th) /
 
 final_plot
 
+ggsave(
+  file = here("03-figures", "tidy.png"),
+  width = 20,
+  height = 14
+)
+
 ```
 
 # Main results
