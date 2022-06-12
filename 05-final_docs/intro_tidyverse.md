@@ -1,14 +1,26 @@
----
-title: "Introduction to The Tidyverse for data analyses"
-author: "Julen Astigarraga"
-date: "15/06/2022"
-output:
-  github_document:
-    toc: true
-    toc_depth: 2
-editor_options: 
-  chunk_output_type: inline
----
+Introduction to The Tidyverse for data analyses
+================
+Julen Astigarraga
+15/06/2022
+
+-   [Problem we are going to work
+    with](#problem-we-are-going-to-work-with)
+    -   [Download data](#download-data)
+-   [The Tidyverse](#the-tidyverse)
+    -   [1\| readr (read rectangular
+        data)](#1-readr-read-rectangular-data)
+    -   [2\| tibble (modern reimagining of the
+        data.frame)](#2-tibble-modern-reimagining-of-the-dataframe)
+    -   [3\| tidyr (tidy data)](#3-tidyr-tidy-data)
+    -   [4\| dplyr (data manipulation)](#4-dplyr-data-manipulation)
+    -   [5\| ggplot (data visualisation)](#5-ggplot-data-visualisation)
+    -   [6\| stringr (string
+        manipulation)](#6-stringr-string-manipulation)
+    -   [7\| forcats (solve problems with
+        factors)](#7-forcats-solve-problems-with-factors)
+    -   [8\| purrr (functional
+        programming)](#8-purrr-functional-programming)
+    -   [Recommended reading](#recommended-reading)
 
 <style type="text/css">
 h1 {
@@ -25,43 +37,33 @@ body {
 }
 </style>
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
-library(here)
-library(easyclimate)
-library(patchwork)
-library(viridis)
-library(ggpmisc)
-library(fs)
-library(future)
-library(furrr)
-library(rmarkdown)
-
-library(tidyverse)
-
-```
-
-```{r tidydata, echo = FALSE, fig.align = "center", fig.cap = "by Allison Horst"}
-knitr::include_graphics(here("04-output", "figures_tidyverse", "01-tidydata.jpg"))
-```
-
-In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages (<https://www.tidyverse.org/>)
+In this R Markdown file you will find the basic concepts to understand
+the core tidyverse collection of R packages
+(<https://www.tidyverse.org/>)
 
 # Problem we are going to work with
 
-In the city council of Sevilla there are still discrepancies about the existence of anthropogenic climate change. Some parties are of the opinion that it does not exist, others think that it exists but that it is not due to anthropogenic causes and others argue that all the scientific evidence leaves no doubt that it exists and that it is due to anthropogenic causes. The parties that believe that anthropogenic climate change exists have asked you, a group of experts, to produce a report that clearly shows how the increase in CO\~2\~ emissions has gone hand in hand with the increase in temperature in recent decades. How would you solve this issue?
+In the city council of Sevilla there are still discrepancies about the
+existence of anthropogenic climate change. Some parties are of the
+opinion that it does not exist, others think that it exists but that it
+is not due to anthropogenic causes and others argue that all the
+scientific evidence leaves no doubt that it exists and that it is due to
+anthropogenic causes. The parties that believe that anthropogenic
+climate change exists have asked you, a group of experts, to produce a
+report that clearly shows how the increase in CO\~2\~ emissions has gone
+hand in hand with the increase in temperature in recent decades. How
+would you solve this issue?
 
--   The data could be obtained, for example, from the following information sources: Climate data for Sevilla: <https://verughub.github.io/easyclimate/index.html>
+-   The data could be obtained, for example, from the following
+    information sources: Climate data for Sevilla:
+    <https://verughub.github.io/easyclimate/index.html>
 
--   CO\~2\~ emissions data for Spain: <https://edgar.jrc.ec.europa.eu/report_2020#data_download>
-
-```{r framework, echo = FALSE, fig.align = "center", fig.cap = "Wickham & Grolemund (2017)"}
-knitr::include_graphics(here("04-output", "figures_tidyverse", "02-framework.jpg"))
-```
+-   CO\~2\~ emissions data for Spain:
+    <https://edgar.jrc.ec.europa.eu/report_2020#data_download>
 
 ## Download data
 
-```{r download}
+``` r
 coords <- data.frame(
   lon = -5.99629,
   lat = 37.3826
@@ -93,30 +95,31 @@ ggplot() +
 
 # The Tidyverse
 
-```{r tidyverse, echo = FALSE, fig.align = "center"}
-knitr::include_graphics(here("04-output", "figures_tidyverse", "03-tidyverse-packages.png"))
-```
+> The tidyverse is an opinionated collection of R packages designed for
+> data science. All packages share an underlying design philosophy,
+> grammar, and data structures. —
+> [tidyverse](https://www.tidyverse.org/)
 
-> The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. --- [tidyverse](https://www.tidyverse.org/)
+> The tidyverse is fundamentally human centred (Wickham et al. JOSS,
+> 2019) —
 
-> The tidyverse is fundamentally human centred (Wickham et al. JOSS, 2019) ---
-
-`r emo::ji("pencil")` *few advantages compared to base R*
+📝 *few advantages compared to base R*
 
 ## 1\| readr (read rectangular data)
 
--   `r emo::ji("pencil")` Use a consistent naming scheme for the parameters (e.g. col_names and col_types not header and colClasses)
+-   📝 Use a consistent naming scheme for the parameters (e.g. col_names
+    and col_types not header and colClasses)
 -   Are much faster (up to 10x)
 
 1.  Read CO\~2\~ and temperature data
 
-```{r readr}
+``` r
 co_data <- read_csv(here("01-data", "co2.csv"))
 tmin_data <- readRDS(file = here("01-data", "tmin_sevilla.rds"))
 tmax_data <- readRDS(file = here("01-data", "tmax_sevilla.rds"))
 ```
 
-```{r glimpse}
+``` r
 glimpse(co_data)
 head(co_data)
 tail(co_data)
@@ -129,11 +132,11 @@ glimpse(tmax_data)
 
 ## 2\| tibble (modern reimagining of the data.frame)
 
--   `r emo::ji("pencil")` Allow to work with list-columns
+-   📝 Allow to work with list-columns
 -   Assists the user in displaying the printing
 -   Never do partial matching
 
-```{r tibble-data.frame}
+``` r
 class(co_data)
 
 co_data_df <- as.data.frame(co_data)
@@ -145,17 +148,18 @@ co_data$Secto
 
 ## 3\| tidyr (tidy data)
 
--   `r emo::ji("pencil")`tidy data 3 characteristics:
+-   📝tidy data 3 characteristics:
 
 1.  Every column is a variable
 2.  Every row is an observation
 3.  Every cell is a single measurement
 
-`r emo::ji("magnifying")` [Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
+🔍 [Check out this post by Julie Lowndes and Allison
+Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
 
 4\. Change CO\~2\~ annual data to long format
 
-```{r tidyr}
+``` r
 glimpse(co_data)
 
 co_data_l <- co_data |>
@@ -170,17 +174,13 @@ glimpse(co_data_l)
 
 ## 4\| dplyr (data manipulation)
 
-```{r dplyr, echo = FALSE, fig.align = "center", fig.cap = "by Allison Horst"}
-knitr::include_graphics(here("04-output", "figures_tidyverse", "04-dplyr.jpg"))
-```
-
--   `r emo::ji("pencil")` consistent set of verbs
+-   📝 consistent set of verbs
 -   pipes (`%>%` &`|>`)
 
 1.  Filter data from Spain
-2.  Delete (not select) those variables that you're not interested in
+2.  Delete (not select) those variables that you’re not interested in
 
-```{r filter-select}
+``` r
 glimpse(co_data_l)
 
 co_data_l_sp <- co_data_l |>
@@ -204,7 +204,7 @@ glimpse(tmax_data_sel)
 
 3\. Bind/Join both tmin and tmax data
 
-```{r bind-join}
+``` r
 temp_data <- bind_cols(tmin_data_sel, tmax_data_sel)
 glimpse(temp_data)
 
@@ -213,9 +213,10 @@ temp_data <- full_join(tmin_data_sel, tmax_data_sel,
 glimpse(temp_data)
 ```
 
-4\. Create a new variable (column) with mutate to get mean temperature data
+4\. Create a new variable (column) with mutate to get mean temperature
+data
 
-```{r mutate}
+``` r
 daily_tmean <- temp_data %>%
   mutate(
     Tmean = (Tmin + Tmax) / 2,
@@ -225,9 +226,9 @@ daily_tmean <- temp_data %>%
   )
 ```
 
-5\. But wait! We're interested in annual data not daily data
+5\. But wait! We’re interested in annual data not daily data
 
-```{r group_by-summarise}
+``` r
 glimpse(co_data_l_sp)
 glimpse(daily_tmean)
 
@@ -242,7 +243,7 @@ glimpse(annual)
 
 6\. Join both datasets and review what we have learned so far
 
-```{r review}
+``` r
 co_temp <- full_join(
   co_data_l_sp, annual, by = c("co_year" = "year")
 )
@@ -265,13 +266,18 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-`r emo::ji("pencil")` `r emo::ji("shocked")` ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 😲 ggplot2 is a system for declaratively creating graphics, based on
+The Grammar of Graphics. You provide the data, tell ggplot2 how to map
+variables to aesthetics, what graphical primitives to use, and it takes
+care of the details.
 
-1.  Visualise the relationship between annual CO\~2\~ emissions and years
+1.  Visualise the relationship between annual CO\~2\~ emissions and
+    years
 2.  Visualise the relationship between annual mean temperature and years
-3.  Visualise the relationship between annual CO\~2\~ emissions and mean temperature
+3.  Visualise the relationship between annual CO\~2\~ emissions and mean
+    temperature
 
-```{r ggplot}
+``` r
 gg_ye_co <- ggplot(co_temp_all, 
                    aes(x = co_year, y = co_all,
                        color = co_year)) +
@@ -302,17 +308,18 @@ co_temp <- co_temp |>
 
 ## 6\| stringr (string manipulation)
 
--   `r emo::ji("pencil")` All functions in stringr start with str\_ and take a vector of strings as the first argument
+-   📝 All functions in stringr start with str\_ and take a vector of
+    strings as the first argument
 -   Make working with strings as easy as possible
 
 ## 7\| forcats (solve problems with factors)
 
--   `r emo::ji("pencil")` Solve common problems with factors
+-   📝 Solve common problems with factors
 
-1.  Detect and highlight all sectors starting with the word "Other"
-2.  Put the sectors beginning with "Other" at the end of the legend
+1.  Detect and highlight all sectors starting with the word “Other”
+2.  Put the sectors beginning with “Other” at the end of the legend
 
-```{r stringr-forcats}
+``` r
 gg_ye_co_sec <- co_temp |>
   drop_na(Sector) |>
   ggplot(aes(x = co_year, y = co_value, color = Sector)) +
@@ -341,21 +348,22 @@ gg_ye_co_sec <- co_temp_fs |>
 
 ## 8\| purrr (functional programming)
 
--   `r emo::ji("pencil")` The idea of passing a function to another function is an extremely powerful idea, and it’s one of the behaviours that makes R a functional programming language.
--   Functional programming makes your code easier to write and to read (for loops are quite verbose, and require quite a bit of bookkeeping code that is duplicated for every for loop).
--   The apply family of functions in base R solve a similar problem, but purrr is more consistent and thus is easier to learn.
-
-```{r loop-purrr, echo = FALSE, fig.align = "center", fig.cap = "Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)"}
-knitr::include_graphics(here("04-output", "figures_tidyverse", "05-forloops.png"))
-knitr::include_graphics(here("04-output", "figures_tidyverse", "06-map_frosting.png"))
-```
+-   📝 The idea of passing a function to another function is an
+    extremely powerful idea, and it’s one of the behaviours that makes R
+    a functional programming language.
+-   Functional programming makes your code easier to write and to read
+    (for loops are quite verbose, and require quite a bit of bookkeeping
+    code that is duplicated for every for loop).
+-   The apply family of functions in base R solve a similar problem, but
+    purrr is more consistent and thus is easier to learn.
 
 1.  Create a function to add a theme to a ggplot
 2.  Apply this function to all ggplots at once
 
--   `r emo::ji("magnifying")` [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
+-   🔍 [Check out this post by Rebecca
+    Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
 
-```{r purrr}
+``` r
 glimpse(co_data_l)
 
 co_data_l[, "country_name"]
@@ -493,7 +501,7 @@ ggsave(
 
 3\. Useful
 
-```{r useful}
+``` r
 read_all_rds <- function(path){
   path %>%
     dir_ls(regexp = "\\.rds$") |> 
@@ -505,12 +513,15 @@ rds_files <- read_all_rds(path = here("01-data"))
 
 4\. Advanced exercise:
 
--   Fit a linear model for each sector `lm(Tmean.year ~ co_value, data = .x)` and store it as a list-column
--   Predict the response for the data stored in the `data` column using the corresponding linear model
--   Calculate the correlation between the predicted response and the true response
+-   Fit a linear model for each sector
+    `lm(Tmean.year ~ co_value, data = .x)` and store it as a list-column
+-   Predict the response for the data stored in the `data` column using
+    the corresponding linear model
+-   Calculate the correlation between the predicted response and the
+    true response
 -   Run in parallel
 
-```{r advanced}
+``` r
 co_temp_nested <- co_temp |>
   drop_na(Sector) |> 
   group_by(Sector) |>
@@ -546,45 +557,41 @@ co_temp_nested <- co_temp |>
     )
 ```
 
-```{r rendering, eval = F, echo = F}
-render(input = here("03-scripts", "EBD", "intro_tidyverse.Rmd"),
-       output_file = here("05-final_docs", "intro_tidyverse_ebd.md"),
-       output_format = "github_document")
-```
-
-
 ## Recommended reading
 
--   [R for Data Science](https://r4ds.had.co.nz/) by Hadley Wickham & Garrett Grolemund (the information in this document is based mainly on this book)
+-   [R for Data Science](https://r4ds.had.co.nz/) by Hadley Wickham &
+    Garrett Grolemund (the information in this document is based mainly
+    on this book)
 
--   Wickham et al., (2019). Welcome to the Tidyverse. Journal of Open Source Software, 4(43), 1686, <https://doi.org/10.21105/joss.01686>
+-   Wickham et al., (2019). Welcome to the Tidyverse. Journal of Open
+    Source Software, 4(43), 1686, <https://doi.org/10.21105/joss.01686>
 
 -   Core tidyverse packages:
 
     -   [readr](https://readr.tidyverse.org/): read rectangular data
-    -   [tibble](https://tibble.tidyverse.org/): modern reimagining of the data.frame
+    -   [tibble](https://tibble.tidyverse.org/): modern reimagining of
+        the data.frame
     -   [tidyr](https://tidyr.tidyverse.org/): tidy data
     -   [dplyr](https://dplyr.tidyverse.org/): data manipulation
     -   [ggplot2](https://ggplot2.tidyverse.org/): data visualisation
     -   [stringr](https://stringr.tidyverse.org/): string manipulation
-    -   [forcats](https://forcats.tidyverse.org/): solve problems with factors
+    -   [forcats](https://forcats.tidyverse.org/): solve problems with
+        factors
     -   [purrr](https://purrr.tidyverse.org/): functional programming
 
 ------------------------------------------------------------------------
 
 <details>
-
 <summary>
 
 Session Info
 
 </summary>
 
-```{r session-info}
+``` r
 Sys.time()
 git2r::repository()
 sessionInfo()
 ```
 
 </details>
-
