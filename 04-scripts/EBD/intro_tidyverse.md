@@ -1,5 +1,5 @@
 ---
-title: "Introduction to The Tidyverse for data analyses"
+title: "Introduction to The Tidyverse for data analysis"
 author: "Julen Astigarraga"
 date: "15/06/2022"
 output:
@@ -7,44 +7,30 @@ output:
     keep_md: yes
     toc: true
     toc_depth: 2
+    css: styles.css
 editor_options: 
   chunk_output_type: inline
 ---
 
-<style type="text/css">
-h1 {
-    font-size: 20px;
-}
-h2 {
-    font-size: 16px;
-}
-pre {
-  font-size: 12px
-}
-body {
-    font-size: 12px
-}
-</style>
-
 
 
 <div class="figure" style="text-align: center">
-<img src="../../04-figures/01-tidydata.jpg" alt="by Allison Horst" width="5898" />
-<p class="caption">by Allison Horst</p>
+<img src="../../03-figures/01-tidydata.jpg" alt="Illustrations from Allison Horst" width="5898" />
+<p class="caption">Illustrations from Allison Horst</p>
 </div>
 
 In this R Markdown file you will find the basic concepts to understand the core tidyverse collection of R packages (<https://www.tidyverse.org/>)
 
 # Problem we are going to work with
 
-In the city council of Sevilla there are still discrepancies about the existence of anthropogenic climate change. Some parties are of the opinion that it does not exist, others think that it exists but that it is not due to anthropogenic causes and others argue that all the scientific evidence leaves no doubt that it exists and that it is due to anthropogenic causes. The parties that believe that anthropogenic climate change exists have asked you, a group of experts, to produce a report that clearly shows how the increase in CO\~2\~ emissions has gone hand in hand with the increase in temperature in recent decades. How would you solve this issue?
+In the city council of Sevilla there are still discrepancies about the existence of anthropogenic climate change. Some parties are of the opinion that it does not exist, others think that it exists but that it is not due to anthropogenic causes and others argue that all the scientific evidence leaves no doubt that it exists and that it is due to anthropogenic causes. The parties that believe that anthropogenic climate change exists have asked you, a group of experts, to produce a report that clearly shows how the increase in CO~2~ emissions has gone hand in hand with the increase in temperature in recent decades. How would you solve this issue?
 
 -   The data could be obtained, for example, from the following information sources: Climate data for Sevilla: <https://verughub.github.io/easyclimate/index.html>
 
--   CO\~2\~ emissions data for Spain: <https://edgar.jrc.ec.europa.eu/report_2020#data_download>
+-   CO~2~ emissions data for Spain: <https://edgar.jrc.ec.europa.eu/report_2020#data_download>
 
 <div class="figure" style="text-align: center">
-<img src="../../04-figures/02-framework.jpg" alt="Wickham &amp; Grolemund (2017)" width="1021" />
+<img src="../../03-figures/02-framework.jpg" alt="Wickham &amp; Grolemund (2017)" width="1021" />
 <p class="caption">Wickham & Grolemund (2017)</p>
 </div>
 
@@ -87,7 +73,7 @@ ggplot() +
 
 # The Tidyverse
 
-<img src="../../04-figures/03-tidyverse-packages.png" width="1920" style="display: block; margin: auto;" />
+<img src="../../03-figures/03-tidyverse-packages.png" width="1920" style="display: block; margin: auto;" />
 
 > The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. --- [tidyverse](https://www.tidyverse.org/)
 
@@ -100,7 +86,7 @@ ggplot() +
 -   📝 Use a consistent naming scheme for the parameters (e.g. col_names and col_types not header and colClasses)
 -   Are much faster (up to 10x)
 
-1.  Read CO\~2\~ and temperature data
+1.  Read CO~2~ and temperature data
 
 
 ```r
@@ -881,9 +867,9 @@ co_data$Secto
 2.  Every row is an observation
 3.  Every cell is a single measurement
 
-🔍 [Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
+🔎 [Check out this post by Julie Lowndes and Allison Horst](https://www.openscapes.org/blog/2020/10/12/tidy-data/)
 
-4\. Change CO\~2\~ annual data to long format
+4\. Change CO~2~ annual data to long format
 
 
 ```r
@@ -970,8 +956,8 @@ glimpse(co_data_l)
 ## 4\| dplyr (data manipulation)
 
 <div class="figure" style="text-align: center">
-<img src="../../04-figures/04-dplyr.jpg" alt="by Allison Horst" width="1200" />
-<p class="caption">by Allison Horst</p>
+<img src="../../03-figures/04-dplyr.png" alt="Illustrations from Allison Horst" width="1913" />
+<p class="caption">Illustrations from Allison Horst</p>
 </div>
 
 -   📝 consistent set of verbs
@@ -1200,11 +1186,11 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-📝 😱 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 🤯 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
-1.  Visualise the relationship between annual CO\~2\~ emissions and years
+1.  Visualise the relationship between annual CO~2~ emissions and years
 2.  Visualise the relationship between annual mean temperature and years
-3.  Visualise the relationship between annual CO\~2\~ emissions and mean temperature
+3.  Visualise the relationship between annual CO~2~ emissions and mean temperature
 
 
 ```r
@@ -1301,10 +1287,10 @@ gg_ye_co_sec <- co_temp_fs |>
 -   The apply family of functions in base R solve a similar problem, but purrr is more consistent and thus is easier to learn.
 
 <div class="figure" style="text-align: center">
-<img src="../../04-figures/05-forloops.png" alt="Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)" width="5000" />
+<img src="../../03-figures/05-forloops.png" alt="Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)" width="5000" />
 <p class="caption">Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)</p>
 </div><div class="figure" style="text-align: center">
-<img src="../../04-figures/06-map_frosting.png" alt="Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)" width="5869" />
+<img src="../../03-figures/06-map_frosting.png" alt="Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)" width="5869" />
 <p class="caption">Illustrations from Hadley Wickham's talk The Joy of Functional Programming (for Data Science)</p>
 </div>
 
@@ -1710,7 +1696,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-06-12 17:00:46 CEST"
+## [1] "2022-06-12 18:40:54 CEST"
 ```
 
 ```r
@@ -1718,9 +1704,9 @@ git2r::repository()
 ```
 
 ```
-## Local:    main C:/Users/julen/OneDrive - Universidad de Alcala/species-ranges/coding-support-group/intro_tidyverse
+## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
 ## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse-dplyr.git)
-## Head:     [4b529ee] 2022-06-12: seminar ebd ready
+## Head:     [c33ee75] 2022-06-12: reorganise repo
 ```
 
 ```r
