@@ -3,4 +3,4 @@ Gestionar, limpiar, transformar, visualizar y modelizar datos con el objetivo de
 
 In this repository you will find some of the basic concepts to understand the core tidyverse collection of R packages (https://www.tidyverse.org/) focusing mainly on dplyr but with some touches on all the core packages. For this aim, you will find a couple of examples. One based on the cars dataset and the other relating annual mean temperature and CO2 emissions data from Sevilla.
 
-Note that since I update this repository from time to time in script 04 only the most recent version will work, in this case EBD directory (I kept the others if someone wanted to see the code we used on that day).
+Note that since I update this repository from time to time in 04-scripts only the most recent version will work, in this case EBD directory. I kept the others if someone wanted to see the code we used on that day.
