@@ -74,8 +74,8 @@ ggplot() +
 #   climatic_var = "Tmax"
 #   )
 
-# saveRDS(tmin, file = here("00-raw", "tmin_sevilla.rds"))
-# saveRDS(tmax, file = here("00-raw", "tmax_sevilla.rds"))
+# write_rds(tmin, file = here("00-raw", "tmin_sevilla.rds"))
+# write_rds(tmax, file = here("00-raw", "tmax_sevilla.rds"))
 ```
 
 # The Tidyverse
@@ -99,8 +99,8 @@ knitr::include_graphics(here("03-figures", "03-tidyverse-packages.png"))
 
 ```{r readr}
 co_data <- read_csv(here("02-data", "co2.csv"))
-tmin_data <- readRDS(file = here("02-data", "tmin_sevilla.rds"))
-tmax_data <- readRDS(file = here("02-data", "tmax_sevilla.rds"))
+tmin_data <- read_rds(file = here("02-data", "tmin_sevilla.rds"))
+tmax_data <- read_rds(file = here("02-data", "tmax_sevilla.rds"))
 ```
 
 ```{r glimpse}
@@ -484,7 +484,7 @@ ggsave(
 read_all_rds <- function(path){
   path %>%
     dir_ls(regexp = "\\.rds$") |> 
-    map(readRDS)
+    map(read_rds)
 }
 
 rds_files <- read_all_rds(path = here("02-data"))

@@ -67,8 +67,8 @@ ggplot() +
 #   climatic_var = "Tmax"
 #   )
 
-# saveRDS(tmin, file = here("00-raw", "tmin_sevilla.rds"))
-# saveRDS(tmax, file = here("00-raw", "tmax_sevilla.rds"))
+# write_rds(tmin, file = here("00-raw", "tmin_sevilla.rds"))
+# write_rds(tmax, file = here("00-raw", "tmax_sevilla.rds"))
 ```
 
 # The Tidyverse
@@ -91,8 +91,8 @@ ggplot() +
 
 ```r
 co_data <- read_csv(here("02-data", "co2.csv"))
-tmin_data <- readRDS(file = here("02-data", "tmin_sevilla.rds"))
-tmax_data <- readRDS(file = here("02-data", "tmax_sevilla.rds"))
+tmin_data <- read_rds(file = here("02-data", "tmin_sevilla.rds"))
+tmax_data <- read_rds(file = here("02-data", "tmax_sevilla.rds"))
 ```
 
 
@@ -1186,7 +1186,7 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-📝 🤯 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 😲 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
 1.  Visualise the relationship between annual CO~2~ emissions and years
 2.  Visualise the relationship between annual mean temperature and years
@@ -1468,7 +1468,7 @@ gg_ye_co_sec_th <- gg_ye_co_sec +
 final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
   (gg_ye_temp_th + gg_co_temp_th) +
   plot_annotation(
-    title = expression(paste("Annual mean temperature and "~CO[2], " emissions relationship over the years in Alcalá de Henares, Madrid (1950-2020)")),
+    title = expression(paste("Annual mean temperature and "~CO[2], " emissions relationship over the years in Sevilla (1950-2020)")),
     caption = "   Data source:
       -Moreno A, Hasenauer H (2016). “Spatial downscaling of European climate data” International Journal of Climatology, 1444–1458.
       -Rammer W, Pucher C, Neumann M (2018). Description, Evaluation and Validation of Downscaled Daily Climate Data Version 2.
@@ -1496,7 +1496,7 @@ ggsave(
 read_all_rds <- function(path){
   path %>%
     dir_ls(regexp = "\\.rds$") |> 
-    map(readRDS)
+    map(read_rds)
 }
 
 rds_files <- read_all_rds(path = here("02-data"))
@@ -1696,7 +1696,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-06-12 18:40:54 CEST"
+## [1] "2022-06-14 10:31:49 CEST"
 ```
 
 ```r
@@ -1705,8 +1705,8 @@ git2r::repository()
 
 ```
 ## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
-## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse-dplyr.git)
-## Head:     [c33ee75] 2022-06-12: reorganise repo
+## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse.git)
+## Head:     [63cadc3] 2022-06-13: fixed sevilla plot
 ```
 
 ```r
