@@ -162,7 +162,7 @@ knitr::include_graphics(here("03-figures", "04-dplyr.png"))
 ```
 
 -   `r emo::ji("pencil")` consistent set of verbs
--   pipes (`%>%` &`|>`)
+-   pipes (`%>%` & `|>`)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in
@@ -179,10 +179,10 @@ glimpse(co_data_l_sp)
 glimpse(tmin_data)
 
 tmin_data_sel <- tmin_data |>
-  select(!c(ID_coords))
+  select(!ID_coords)
 
 tmax_data_sel <- tmax_data |>
-  select(!c(ID_coords))
+  select(!ID_coords)
 
 glimpse(tmin_data_sel)
 
@@ -292,12 +292,14 @@ co_temp <- co_temp |>
 -   `r emo::ji("pencil")` All functions in stringr start with str\_ and take a vector of strings as the first argument
 -   Make working with strings as easy as possible
 
+1. Highlight the transport sector
+
 ## 7\| forcats (solve problems with factors)
 
 -   `r emo::ji("pencil")` Solve common problems with factors
 
-1.  Detect and highlight all sectors starting with the word "Other"
-2.  Put the sectors beginning with "Other" at the end of the legend
+1.  Detect all sectors starting with the word "Other"
+2.  Put the sectors starting with "Other" at the end of the legend
 
 ```{r stringr-forcats}
 gg_ye_co_sec <- co_temp |>
@@ -510,7 +512,7 @@ co_temp_nested <- co_temp |>
     cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
     )
 
-co_temp_nested["pred"][[1]]
+co_temp_nested$pred[[1]]
 
 co_temp_nested |> 
   pluck("pred", 1)

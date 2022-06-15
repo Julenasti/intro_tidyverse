@@ -961,7 +961,7 @@ glimpse(co_data_l)
 </div>
 
 -   📝 consistent set of verbs
--   pipes (`%>%` &`|>`)
+-   pipes (`%>%` & `|>`)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in
@@ -1012,10 +1012,10 @@ glimpse(tmin_data)
 
 ```r
 tmin_data_sel <- tmin_data |>
-  select(!c(ID_coords))
+  select(!ID_coords)
 
 tmax_data_sel <- tmax_data |>
-  select(!c(ID_coords))
+  select(!ID_coords)
 
 glimpse(tmin_data_sel)
 ```
@@ -1186,7 +1186,7 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-📝 😲 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 😨 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
 1.  Visualise the relationship between annual CO~2~ emissions and years
 2.  Visualise the relationship between annual mean temperature and years
@@ -1231,12 +1231,14 @@ co_temp <- co_temp |>
 -   📝 All functions in stringr start with str\_ and take a vector of strings as the first argument
 -   Make working with strings as easy as possible
 
+1. Highlight the transport sector
+
 ## 7\| forcats (solve problems with factors)
 
 -   📝 Solve common problems with factors
 
-1.  Detect and highlight all sectors starting with the word "Other"
-2.  Put the sectors beginning with "Other" at the end of the legend
+1.  Detect all sectors starting with the word "Other"
+2.  Put the sectors starting with "Other" at the end of the legend
 
 
 ```r
@@ -1297,7 +1299,7 @@ gg_ye_co_sec <- co_temp_fs |>
 1.  Create a function to add a theme to a ggplot
 2.  Apply this function to all ggplots at once
 
--   🔎 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
+-   🔍 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
 
 
 ```r
@@ -1523,11 +1525,10 @@ co_temp_nested <- co_temp |>
     cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
     )
 
-co_temp_nested["pred"][[1]]
+co_temp_nested$pred[[1]]
 ```
 
 ```
-## [[1]]
 ##        1        2        3        4        5        6        7        8 
 ## 18.17497 18.31394 18.37289 18.25162 18.21119 18.29120 18.31141 18.39058 
 ##        9       10       11       12       13       14       15       16 
@@ -1541,71 +1542,7 @@ co_temp_nested["pred"][[1]]
 ##       41       42       43       44       45       46       47       48 
 ## 19.87959 19.63956 19.61851 19.59830 19.43828 19.62019 19.66988 19.79453 
 ##       49       50 
-## 19.80850 19.98574 
-## 
-## [[2]]
-##        1        2        3        4        5        6        7        8 
-## 18.68744 18.73370 19.07153 18.98008 19.03764 19.08067 19.15168 19.10918 
-##        9       10       11       12       13       14       15       16 
-## 19.06131 19.14038 19.07744 19.15491 19.09304 19.09197 18.99353 18.93274 
-##       17       18       19       20       21       22       23       24 
-## 18.90638 18.91821 18.96986 19.03979 19.07529 19.07583 18.91068 18.86603 
-##       25       26       27       28       29       30       31       32 
-## 18.95748 19.03710 19.05646 19.13285 19.26626 19.32059 19.38783 19.31736 
-##       33       34       35       36       37       38       39       40 
-## 19.35986 19.45992 19.45239 19.49004 19.45938 19.47552 19.28939 18.96609 
-##       41       42       43       44       45       46       47       48 
-## 18.99621 18.95479 18.91714 18.78158 18.87841 18.88379 18.88755 18.89723 
-##       49       50 
-## 18.90567 18.91475 
-## 
-## [[3]]
-##        1        2        3        4        5        6        7        8 
-## 19.05971 19.08279 19.07958 19.06093 19.05544 19.06316 19.05488 19.05329 
-##        9       10       11       12       13       14       15       16 
-## 19.05942 19.06138 19.06563 19.07000 19.08385 19.08024 19.08770 19.08873 
-##       17       18       19       20       21       22       23       24 
-## 19.08852 19.09144 19.08043 19.08069 19.08189 19.07642 19.08221 19.08815 
-##       25       26       27       28       29       30       31       32 
-## 19.07812 19.07597 19.08350 19.06878 19.06995 19.07759 19.06207 19.05266 
-##       33       34       35       36       37       38       39       40 
-## 19.05515 19.04096 19.03894 19.03502 19.05422 19.04353 19.05449 19.07876 
-##       41       42       43       44       45       46       47       48 
-## 19.07239 19.07955 19.07825 19.08340 19.09085 19.09608 19.09602 19.08868 
-##       49       50 
-## 19.08954 19.08398 
-## 
-## [[4]]
-##        1        2        3        4        5        6        7        8 
-## 17.93639 17.95292 18.01403 18.10173 18.27211 18.41516 18.65119 18.45470 
-##        9       10       11       12       13       14       15       16 
-## 18.40941 18.49951 18.88651 19.09450 19.06407 19.09570 18.89753 18.76645 
-##       17       18       19       20       21       22       23       24 
-## 18.83115 18.81414 18.58266 18.96438 18.97253 18.98931 19.20976 18.97277 
-##       25       26       27       28       29       30       31       32 
-## 19.00728 19.22749 18.90831 19.20473 19.19442 19.62839 19.72807 19.56489 
-##       33       34       35       36       37       38       39       40 
-## 19.95116 19.77192 19.97129 20.18264 20.04006 20.23129 19.85388 19.48797 
-##       41       42       43       44       45       46       47       48 
-## 19.10720 19.46305 19.57423 19.04466 19.07509 19.34371 19.05017 19.31016 
-##       49       50 
-## 19.12105 18.71320 
-## 
-## [[5]]
-##        1        2        3        4        5        6        7        8 
-## 17.96791 18.02062 18.05919 18.18521 18.25014 18.27912 18.36394 18.35124 
-##        9       10       11       12       13       14       15       16 
-## 18.40466 18.53140 18.48996 18.42862 18.42551 18.43533 18.47462 18.46168 
-##       17       18       19       20       21       22       23       24 
-## 18.49594 18.55728 18.77362 18.85484 18.92312 18.98565 19.07094 19.04698 
-##       25       26       27       28       29       30       31       32 
-## 19.10208 19.13203 19.24871 19.24703 19.42576 19.52806 19.57358 19.67133 
-##       33       34       35       36       37       38       39       40 
-## 19.71205 19.83137 19.93606 20.02614 20.11862 20.19002 20.04124 19.83568 
-##       41       42       43       44       45       46       47       48 
-## 19.76596 19.61071 19.38934 19.36370 19.37185 19.45858 19.50865 19.53045 
-##       49       50 
-## 19.57188 19.57655
+## 19.80850 19.98574
 ```
 
 ```r
@@ -1696,7 +1633,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-06-14 10:31:49 CEST"
+## [1] "2022-06-15 10:57:29 CEST"
 ```
 
 ```r
@@ -1706,7 +1643,7 @@ git2r::repository()
 ```
 ## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
 ## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse.git)
-## Head:     [63cadc3] 2022-06-13: fixed sevilla plot
+## Head:     [d8d4a92] 2022-06-14: read & write rds readr
 ```
 
 ```r
