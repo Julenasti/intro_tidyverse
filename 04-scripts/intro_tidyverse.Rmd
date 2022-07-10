@@ -169,6 +169,7 @@ knitr::include_graphics(here("03-figures", "04-dplyr.png"))
 
 -   `r emo::ji("pencil")` consistent set of verbs
 -   pipes (`%>%` & `|>`)
+`r emo::ji("magnifying")` [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in

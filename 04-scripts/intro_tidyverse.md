@@ -968,6 +968,7 @@ glimpse(co_data_l)
 
 -   📝 consistent set of verbs
 -   pipes (`%>%` & `|>`)
+🔍 [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in
@@ -1192,7 +1193,7 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-📝 😲 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 😨 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
 1.  Visualise the relationship between annual CO~2~ emissions and years
 2.  Visualise the relationship between annual mean temperature and years
@@ -1305,7 +1306,7 @@ gg_ye_co_sec <- co_temp_fs |>
 1.  Create a function to add a theme to a ggplot
 2.  Apply this function to all ggplots at once
 
--   🔍 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
+-   🔎 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
 
 
 ```r
@@ -1640,7 +1641,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-07-10 19:39:16 CEST"
+## [1] "2022-07-10 20:18:00 CEST"
 ```
 
 ```r
@@ -1650,7 +1651,7 @@ git2r::repository()
 ```
 ## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
 ## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse.git)
-## Head:     [7692613] 2022-07-10: update scripts directory
+## Head:     [dbcef01] 2022-07-10: set eval true
 ```
 
 ```r
