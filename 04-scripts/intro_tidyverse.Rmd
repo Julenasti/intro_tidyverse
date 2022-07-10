@@ -9,7 +9,7 @@ output:
     toc_depth: 2
     css: styles.css
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 `r emo::ji("email")` julenastigarraga@gmail.com
@@ -19,7 +19,7 @@ editor_options:
 [![GitHub URL](https://img.shields.io/badge/github%20-%23181717.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Julenasti)
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = F, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
 library(here)
 library(easyclimate)
 library(patchwork)
