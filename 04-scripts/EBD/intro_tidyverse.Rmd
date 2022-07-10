@@ -1,7 +1,7 @@
 ---
-title: "Introduction to The Tidyverse for data analysis"
+title: "Sacando el máximo partido a Tidyverse"
 author: "Julen Astigarraga"
-date: "15/06/2022"
+date: "13/07/2022"
 output:
   html_document:
     keep_md: yes
@@ -9,11 +9,17 @@ output:
     toc_depth: 2
     css: styles.css
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
+`r emo::ji("email")` julenastigarraga@gmail.com
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/J_astigarraga.svg?style=social&label=%20%40J_astigarraga)](https://twitter.com/J_astigarraga)
+
+[![GitHub URL](https://img.shields.io/badge/github%20-%23181717.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Julenasti)
+
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = F, warning = FALSE, message = FALSE)
 library(here)
 library(easyclimate)
 library(patchwork)
@@ -466,7 +472,8 @@ final_plot <- (gg_ye_co_th + gg_ye_co_sec_th) /
       -Cruz-Alonso V, Rodríguez-Sánchez F, Pucher C, Ratcliffe S, Astigarraga J, Neumann M, Ruiz-Benito P (2021). easyclimate: Easy access to high-resolution daily climate data for Europe.
       -Crippa M, Guizzardi D, Muntean M, Schaaf E, Solazzo E, Monforti-Ferrario F, Olivier JGJ, Vignati E, Fossil CO2 emissions of all world countries - 2020 Report, EUR 30358 EN,
        Publications Office of the European Union, Luxembourg, 2020.
-    Graphic: PhD EBD seminar",
+    Graphic: Grupo de Usuarios de R de Sevilla
+    Codes: https://github.com/Julenasti/climate-variables",
     theme = theme(
       plot.title = element_text(size = 24, face = "bold"),
       plot.caption = element_text(hjust = 0, size = 14, color = "grey50", margin = margin(t = 25))
