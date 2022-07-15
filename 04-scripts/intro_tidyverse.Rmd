@@ -9,7 +9,7 @@ output:
     toc_depth: 2
     css: styles.css
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 `r emo::ji("email")` julenastigarraga@gmail.com
@@ -20,16 +20,18 @@ editor_options:
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
-library(here)
-library(easyclimate)
-library(patchwork)
-library(viridis)
-library(ggpmisc)
-library(fs)
-library(future)
-library(furrr)
-library(rmarkdown)
 
+# install.packages("pacman")
+
+pacman::p_load(
+  here, easyclimate,
+  patchwork, viridis,
+  ggpmisc, fs,
+  future, furrr,
+  rmarkdown
+)
+
+# see attached packages & conflicts
 library(tidyverse)
 
 ```
@@ -80,8 +82,8 @@ ggplot() +
 #   climatic_var = "Tmax"
 #   )
 
-# write_rds(tmin, file = here("00-raw", "tmin_sevilla.rds"))
-# write_rds(tmax, file = here("00-raw", "tmax_sevilla.rds"))
+# write_rds(tmin, file = here("01-raw", "tmin_sevilla.rds"))
+# write_rds(tmax, file = here("01-raw", "tmax_sevilla.rds"))
 ```
 
 # The Tidyverse
@@ -492,7 +494,7 @@ ggsave(
 
 ```{r useful}
 read_all_rds <- function(path){
-  path %>%
+  path |>
     dir_ls(regexp = "\\.rds$") |> 
     map(read_rds)
 }
@@ -520,12 +522,12 @@ co_temp_nested <- co_temp |>
     cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
     )
 
-co_temp_nested$pred[[1]]
+co_temp_nested
+
+co_temp_nested$data[[1]]
 
 co_temp_nested |> 
-  pluck("pred", 1)
-
-co_temp_nested
+  pluck("data", 1)
 
 # parallel
 plan(multisession, workers = 2)

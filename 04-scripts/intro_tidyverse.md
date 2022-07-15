@@ -9,7 +9,7 @@ output:
     toc_depth: 2
     css: styles.css
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ✉️ julenastigarraga@gmail.com
@@ -73,8 +73,8 @@ ggplot() +
 #   climatic_var = "Tmax"
 #   )
 
-# write_rds(tmin, file = here("00-raw", "tmin_sevilla.rds"))
-# write_rds(tmax, file = here("00-raw", "tmax_sevilla.rds"))
+# write_rds(tmin, file = here("01-raw", "tmin_sevilla.rds"))
+# write_rds(tmax, file = here("01-raw", "tmax_sevilla.rds"))
 ```
 
 # The Tidyverse
@@ -968,7 +968,7 @@ glimpse(co_data_l)
 
 -   📝 consistent set of verbs
 -   pipes (`%>%` & `|>`)
-🔍 [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
+🔎 [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in
@@ -1193,7 +1193,7 @@ glimpse(co_temp_all)
 
 ## 5\| ggplot (data visualisation)
 
-📝 😨 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+📝 😱 ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
 1.  Visualise the relationship between annual CO~2~ emissions and years
 2.  Visualise the relationship between annual mean temperature and years
@@ -1306,7 +1306,7 @@ gg_ye_co_sec <- co_temp_fs |>
 1.  Create a function to add a theme to a ggplot
 2.  Apply this function to all ggplots at once
 
--   🔎 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
+-   🔍 [Check out this post by Rebecca Barter](https://www.rebeccabarter.com/blog/2019-08-19_purrr/)
 
 
 ```r
@@ -1504,7 +1504,7 @@ ggsave(
 
 ```r
 read_all_rds <- function(path){
-  path %>%
+  path |>
     dir_ls(regexp = "\\.rds$") |> 
     map(read_rds)
 }
@@ -1533,49 +1533,6 @@ co_temp_nested <- co_temp |>
     cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
     )
 
-co_temp_nested$pred[[1]]
-```
-
-```
-##        1        2        3        4        5        6        7        8 
-## 18.17497 18.31394 18.37289 18.25162 18.21119 18.29120 18.31141 18.39058 
-##        9       10       11       12       13       14       15       16 
-## 18.46975 18.65671 18.54386 18.50343 18.57502 18.60702 18.62639 18.68366 
-##       17       18       19       20       21       22       23       24 
-## 18.69377 18.69630 18.66935 18.51522 18.61460 18.81589 18.89674 18.84284 
-##       25       26       27       28       29       30       31       32 
-## 18.94980 18.94980 19.03992 19.04076 19.03739 19.20246 19.43912 19.46944 
-##       33       34       35       36       37       38       39       40 
-## 19.51744 19.73136 20.00003 20.03287 20.08762 19.90654 19.73894 19.67999 
-##       41       42       43       44       45       46       47       48 
-## 19.87959 19.63956 19.61851 19.59830 19.43828 19.62019 19.66988 19.79453 
-##       49       50 
-## 19.80850 19.98574
-```
-
-```r
-co_temp_nested |> 
-  pluck("pred", 1)
-```
-
-```
-##        1        2        3        4        5        6        7        8 
-## 18.17497 18.31394 18.37289 18.25162 18.21119 18.29120 18.31141 18.39058 
-##        9       10       11       12       13       14       15       16 
-## 18.46975 18.65671 18.54386 18.50343 18.57502 18.60702 18.62639 18.68366 
-##       17       18       19       20       21       22       23       24 
-## 18.69377 18.69630 18.66935 18.51522 18.61460 18.81589 18.89674 18.84284 
-##       25       26       27       28       29       30       31       32 
-## 18.94980 18.94980 19.03992 19.04076 19.03739 19.20246 19.43912 19.46944 
-##       33       34       35       36       37       38       39       40 
-## 19.51744 19.73136 20.00003 20.03287 20.08762 19.90654 19.73894 19.67999 
-##       41       42       43       44       45       46       47       48 
-## 19.87959 19.63956 19.61851 19.59830 19.43828 19.62019 19.66988 19.79453 
-##       49       50 
-## 19.80850 19.98574
-```
-
-```r
 co_temp_nested
 ```
 
@@ -1589,6 +1546,49 @@ co_temp_nested
 ## 3 Other industrial combustion <tibble [50 × 3]> <lm>   <dbl [50]> 0.0201
 ## 4 Power Industry              <tibble [50 × 3]> <lm>   <dbl [50]> 0.722 
 ## 5 Transport                   <tibble [50 × 3]> <lm>   <dbl [50]> 0.813
+```
+
+```r
+co_temp_nested$data[[1]]
+```
+
+```
+## # A tibble: 50 × 3
+##    co_year co_value Tmean.year
+##      <dbl>    <dbl>      <dbl>
+##  1    1970     15.2       18.2
+##  2    1971     16.8       17.5
+##  3    1972     17.6       17.3
+##  4    1973     16.1       18.0
+##  5    1974     15.6       18.1
+##  6    1975     16.6       18.1
+##  7    1976     16.8       18.0
+##  8    1977     17.8       18.1
+##  9    1978     18.7       18.3
+## 10    1979     20.9       18.3
+## # … with 40 more rows
+```
+
+```r
+co_temp_nested |> 
+  pluck("data", 1)
+```
+
+```
+## # A tibble: 50 × 3
+##    co_year co_value Tmean.year
+##      <dbl>    <dbl>      <dbl>
+##  1    1970     15.2       18.2
+##  2    1971     16.8       17.5
+##  3    1972     17.6       17.3
+##  4    1973     16.1       18.0
+##  5    1974     15.6       18.1
+##  6    1975     16.6       18.1
+##  7    1976     16.8       18.0
+##  8    1977     17.8       18.1
+##  9    1978     18.7       18.3
+## 10    1979     20.9       18.3
+## # … with 40 more rows
 ```
 
 ```r
@@ -1641,7 +1641,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-07-10 20:18:00 CEST"
+## [1] "2022-07-15 11:06:42 CEST"
 ```
 
 ```r
@@ -1651,7 +1651,7 @@ git2r::repository()
 ```
 ## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
 ## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse.git)
-## Head:     [dbcef01] 2022-07-10: set eval true
+## Head:     [ed84ac9] 2022-07-10: add understanding native r pipe
 ```
 
 ```r
@@ -1688,21 +1688,22 @@ sessionInfo()
 ##  [9] utf8_1.2.2         R6_2.5.1           mgcv_1.8-40        DBI_1.1.2         
 ## [13] colorspace_2.0-3   withr_2.5.0        tidyselect_1.1.2   gridExtra_2.3     
 ## [17] git2r_0.30.1       bit_4.0.4          compiler_4.2.0     cli_3.3.0         
-## [21] rvest_1.0.2        quantreg_5.93      SparseM_1.81       xml2_1.3.3        
-## [25] labeling_0.4.2     sass_0.4.1         scales_1.2.0       digest_0.6.29     
-## [29] jpeg_0.1-9         pkgconfig_2.0.3    htmltools_0.5.2    parallelly_1.31.1 
-## [33] dbplyr_2.1.1       fastmap_1.1.0      highr_0.9          maps_3.4.0        
-## [37] rlang_1.0.2        readxl_1.4.0       rstudioapi_0.13    jquerylib_0.1.4   
-## [41] generics_0.1.2     farver_2.1.0       jsonlite_1.8.0     vroom_1.5.7       
-## [45] magrittr_2.0.3     Matrix_1.4-1       munsell_0.5.0      fansi_1.0.3       
-## [49] lifecycle_1.0.1    stringi_1.7.6      yaml_2.3.5         MASS_7.3-56       
-## [53] grid_4.2.0         parallel_4.2.0     listenv_0.8.0      crayon_1.5.1      
-## [57] lattice_0.20-45    haven_2.5.0        splines_4.2.0      hms_1.1.1         
-## [61] knitr_1.39.3       pillar_1.7.0       emo_0.0.0.9000     codetools_0.2-18  
-## [65] reprex_2.0.1       glue_1.6.2         evaluate_0.15      modelr_0.1.8      
-## [69] vctrs_0.4.1        png_0.1-7          tzdb_0.3.0         MatrixModels_0.5-0
-## [73] cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1   xfun_0.31         
-## [77] broom_0.8.0        survival_3.3-1     globals_0.15.0     ellipsis_0.3.2
+## [21] rvest_1.0.2        quantreg_5.93      pacman_0.5.1       SparseM_1.81      
+## [25] xml2_1.3.3         labeling_0.4.2     sass_0.4.1         scales_1.2.0      
+## [29] digest_0.6.29      jpeg_0.1-9         pkgconfig_2.0.3    htmltools_0.5.2   
+## [33] parallelly_1.31.1  dbplyr_2.1.1       fastmap_1.1.0      highr_0.9         
+## [37] maps_3.4.0         rlang_1.0.2        readxl_1.4.0       rstudioapi_0.13   
+## [41] jquerylib_0.1.4    generics_0.1.2     farver_2.1.0       jsonlite_1.8.0    
+## [45] vroom_1.5.7        magrittr_2.0.3     Matrix_1.4-1       munsell_0.5.0     
+## [49] fansi_1.0.3        lifecycle_1.0.1    stringi_1.7.6      yaml_2.3.5        
+## [53] MASS_7.3-56        grid_4.2.0         parallel_4.2.0     listenv_0.8.0     
+## [57] crayon_1.5.1       lattice_0.20-45    haven_2.5.0        splines_4.2.0     
+## [61] hms_1.1.1          knitr_1.39.3       pillar_1.7.0       emo_0.0.0.9000    
+## [65] codetools_0.2-18   reprex_2.0.1       glue_1.6.2         evaluate_0.15     
+## [69] modelr_0.1.8       vctrs_0.4.1        png_0.1-7          tzdb_0.3.0        
+## [73] MatrixModels_0.5-0 cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
+## [77] xfun_0.31          broom_0.8.0        survival_3.3-1     globals_0.15.0    
+## [81] ellipsis_0.3.2
 ```
 
 </details>
