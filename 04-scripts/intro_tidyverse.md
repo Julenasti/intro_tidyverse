@@ -1,7 +1,7 @@
 ---
 title: "Sacando el máximo partido a Tidyverse"
 author: "Julen Astigarraga"
-date: "13/07/2022"
+date: "07/02/2023"
 output:
   html_document:
     keep_md: yes
@@ -169,21 +169,21 @@ head(co_data)
 
 ```
 ## # A tibble: 6 × 52
-##   Sector    country_name `1970` `1971` `1972` `1973` `1974` `1975` `1976` `1977`
-##   <chr>     <chr>        <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr> 
-## 1 Buildings Afghanistan  0.58   0.58   0.46   0.57   0.77   0.59   0.48   0.43  
-## 2 Buildings Albania      0.99   0.99   1.10   1.30   1.41   1.75   1.91   2.02  
-## 3 Buildings Algeria      1.81   1.81   2.11   2.51   2.68   2.97   3.79   3.80  
-## 4 Buildings Angola       0.12   0.12   0.14   0.14   0.13   0.12   0.09   0.10  
-## 5 Buildings Anguilla     0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00  
-## 6 Buildings Antigua and… 0.06   0.06   0.08   0.08   0.06   0.08   0.06   0.07  
-## # … with 42 more variables: `1978` <chr>, `1979` <chr>, `1980` <chr>,
-## #   `1981` <chr>, `1982` <chr>, `1983` <chr>, `1984` <chr>, `1985` <chr>,
-## #   `1986` <chr>, `1987` <chr>, `1988` <chr>, `1989` <chr>, `1990` <chr>,
-## #   `1991` <chr>, `1992` <chr>, `1993` <chr>, `1994` <chr>, `1995` <chr>,
-## #   `1996` <chr>, `1997` <chr>, `1998` <chr>, `1999` <chr>, `2000` <chr>,
-## #   `2001` <chr>, `2002` <chr>, `2003` <chr>, `2004` <chr>, `2005` <chr>,
-## #   `2006` <chr>, `2007` <chr>, `2008` <chr>, `2009` <chr>, `2010` <chr>, …
+##   Sector  count…¹ `1970` `1971` `1972` `1973` `1974` `1975` `1976` `1977` `1978`
+##   <chr>   <chr>   <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr> 
+## 1 Buildi… Afghan… 0.58   0.58   0.46   0.57   0.77   0.59   0.48   0.43   0.41  
+## 2 Buildi… Albania 0.99   0.99   1.10   1.30   1.41   1.75   1.91   2.02   2.21  
+## 3 Buildi… Algeria 1.81   1.81   2.11   2.51   2.68   2.97   3.79   3.80   4.46  
+## 4 Buildi… Angola  0.12   0.12   0.14   0.14   0.13   0.12   0.09   0.10   0.33  
+## 5 Buildi… Anguil… 0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00  
+## 6 Buildi… Antigu… 0.06   0.06   0.08   0.08   0.06   0.08   0.06   0.07   0.06  
+## # … with 41 more variables: `1979` <chr>, `1980` <chr>, `1981` <chr>,
+## #   `1982` <chr>, `1983` <chr>, `1984` <chr>, `1985` <chr>, `1986` <chr>,
+## #   `1987` <chr>, `1988` <chr>, `1989` <chr>, `1990` <chr>, `1991` <chr>,
+## #   `1992` <chr>, `1993` <chr>, `1994` <chr>, `1995` <chr>, `1996` <chr>,
+## #   `1997` <chr>, `1998` <chr>, `1999` <chr>, `2000` <chr>, `2001` <chr>,
+## #   `2002` <chr>, `2003` <chr>, `2004` <chr>, `2005` <chr>, `2006` <chr>,
+## #   `2007` <chr>, `2008` <chr>, `2009` <chr>, `2010` <chr>, `2011` <chr>, …
 ```
 
 ```r
@@ -192,21 +192,21 @@ tail(co_data)
 
 ```
 ## # A tibble: 6 × 52
-##   Sector    country_name `1970` `1971` `1972` `1973` `1974` `1975` `1976` `1977`
-##   <chr>     <chr>        <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr> 
-## 1 Transport Western Sah… 0.01   0.01   0.01   0.01   0.01   0.01   0.02   0.02  
-## 2 Transport Yemen        0.66   0.66   0.92   1.25   1.25   1.02   1.53   1.47  
-## 3 Transport Zambia       0.63   0.63   0.69   0.73   0.69   0.74   0.77   0.68  
-## 4 Transport Zimbabwe     2.08   2.08   2.28   2.28   1.93   2.15   1.86   1.73  
-## 5 Transport Internation… 168.82 168.82 178.76 186.62 179.14 173.24 173.69 189.34
-## 6 Transport Internation… 353.86 353.86 370.88 391.73 366.05 341.22 352.02 351.74
-## # … with 42 more variables: `1978` <chr>, `1979` <chr>, `1980` <chr>,
-## #   `1981` <chr>, `1982` <chr>, `1983` <chr>, `1984` <chr>, `1985` <chr>,
-## #   `1986` <chr>, `1987` <chr>, `1988` <chr>, `1989` <chr>, `1990` <chr>,
-## #   `1991` <chr>, `1992` <chr>, `1993` <chr>, `1994` <chr>, `1995` <chr>,
-## #   `1996` <chr>, `1997` <chr>, `1998` <chr>, `1999` <chr>, `2000` <chr>,
-## #   `2001` <chr>, `2002` <chr>, `2003` <chr>, `2004` <chr>, `2005` <chr>,
-## #   `2006` <chr>, `2007` <chr>, `2008` <chr>, `2009` <chr>, `2010` <chr>, …
+##   Sector  count…¹ `1970` `1971` `1972` `1973` `1974` `1975` `1976` `1977` `1978`
+##   <chr>   <chr>   <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr>  <chr> 
+## 1 Transp… Wester… 0.01   0.01   0.01   0.01   0.01   0.01   0.02   0.02   0.02  
+## 2 Transp… Yemen   0.66   0.66   0.92   1.25   1.25   1.02   1.53   1.47   1.61  
+## 3 Transp… Zambia  0.63   0.63   0.69   0.73   0.69   0.74   0.77   0.68   0.63  
+## 4 Transp… Zimbab… 2.08   2.08   2.28   2.28   1.93   2.15   1.86   1.73   1.68  
+## 5 Transp… Intern… 168.82 168.82 178.76 186.62 179.14 173.24 173.69 189.34 196.25
+## 6 Transp… Intern… 353.86 353.86 370.88 391.73 366.05 341.22 352.02 351.74 354.01
+## # … with 41 more variables: `1979` <chr>, `1980` <chr>, `1981` <chr>,
+## #   `1982` <chr>, `1983` <chr>, `1984` <chr>, `1985` <chr>, `1986` <chr>,
+## #   `1987` <chr>, `1988` <chr>, `1989` <chr>, `1990` <chr>, `1991` <chr>,
+## #   `1992` <chr>, `1993` <chr>, `1994` <chr>, `1995` <chr>, `1996` <chr>,
+## #   `1997` <chr>, `1998` <chr>, `1999` <chr>, `2000` <chr>, `2001` <chr>,
+## #   `2002` <chr>, `2003` <chr>, `2004` <chr>, `2005` <chr>, `2006` <chr>,
+## #   `2007` <chr>, `2008` <chr>, `2009` <chr>, `2010` <chr>, `2011` <chr>, …
 ```
 
 ```r
@@ -968,7 +968,7 @@ glimpse(co_data_l)
 
 -   📝 consistent set of verbs
 -   pipes (`%>%` & `|>`)
-🔎 [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
+🔍 [Check out this post by Isabella Velásquez](https://towardsdatascience.com/understanding-the-native-r-pipe-98dea6d8b61b)
 
 1.  Filter data from Spain
 2.  Delete (not select) those variables that you're not interested in
@@ -1344,9 +1344,17 @@ co_data_l[, "country_name"]
 ```
 
 ```r
+# new shortcut for anonymous functions
+# before
 select_example <- function(dat, x){
   return(dat[, x])
 }
+# now
+select_example <- \(dat, x){
+  return(dat[, x])
+}
+
+# the base pipe doesn’t require that you load magrittr and the new function shorthand works everywhere, not just in purrr functions. Additionally, being able to specify the argument name for the anonymous function can often lead to clearer code (from https://www.tidyverse.org/blog/2022/12/purrr-1-0-0/).
 
 select_example(co_data_l, "country_name")
 ```
@@ -1442,8 +1450,13 @@ arg_3 <- list(
   )
   )
 
+## before
+# arg_3 |>
+#   pmap(gg_theme) |>
+#   reduce(`+`)
+## now
 arg_3 |>
-  pmap(gg_theme) |>
+  pmap(\(gg, units, title) gg_theme(gg, units, title)) |>
   reduce(`+`)
 ```
 
@@ -1506,7 +1519,10 @@ ggsave(
 read_all_rds <- function(path){
   path |>
     dir_ls(regexp = "\\.rds$") |> 
-    map(read_rds)
+    ## before
+    # map(read_rds)
+    ## now
+    map(\(fl) read_rds(fl))
 }
 
 rds_files <- read_all_rds(path = here("02-data"))
@@ -1526,11 +1542,20 @@ co_temp_nested <- co_temp |>
   group_by(Sector) |>
   nest() |> 
   mutate(
-    lm_obj = map(data, ~lm(
-      Tmean.year ~ co_value, data = .x)),
+    ## before
+    # lm_obj = map(data, ~lm(
+    #   Tmean.year ~ co_value, data = .x)),
+    ## now
+    lm_obj = map(data, \(dat) lm(
+      Tmean.year ~ co_value, data = dat)),
+    ## before
+    # pred = map2(lm_obj, data,
+    #             ~predict(.x, .y)),
+    ## now
     pred = map2(lm_obj, data,
-                ~predict(.x, .y)),
-    cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
+                \(x, y) predict(x, y)),
+    cor = map2_dbl(pred, data, \(x, y) 
+                   cor(x, y$Tmean.year))
     )
 
 co_temp_nested
@@ -1600,11 +1625,12 @@ co_temp_nested <- co_temp |>
   group_by(Sector) |>
   nest() |> 
   mutate(
-    lm_obj = future_map(data, ~lm(
-      Tmean.year ~ co_value, data = .x)),
+    lm_obj = future_map(data, \(dat) lm(
+      Tmean.year ~ co_value, data = dat)),
     pred = future_map2(lm_obj, data,
-                ~predict(.x, .y)),
-    cor = future_map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
+                       \(x, y) predict(x, y)),
+    cor = future_map2_dbl(pred, data, \(x, y) 
+                          cor(x, y$Tmean.year))
     )
 ```
 
@@ -1641,7 +1667,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2022-07-15 11:06:42 CEST"
+## [1] "2023-02-06 16:30:31 CET"
 ```
 
 ```r
@@ -1651,7 +1677,7 @@ git2r::repository()
 ```
 ## Local:    main C:/Users/julen/OneDrive/Escritorio/GitHub-col/intro_tidyverse
 ## Remote:   main @ origin (https://github.com/Julenasti/intro_tidyverse.git)
-## Head:     [ed84ac9] 2022-07-10: add understanding native r pipe
+## Head:     [d50bd06] 2022-07-15: add function to install or load all packages
 ```
 
 ```r
@@ -1659,7 +1685,7 @@ sessionInfo()
 ```
 
 ```
-## R version 4.2.0 (2022-04-22 ucrt)
+## R version 4.2.1 (2022-06-23 ucrt)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
 ## Running under: Windows 10 x64 (build 19044)
 ## 
@@ -1676,35 +1702,42 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.9       purrr_0.3.4      
-##  [5] readr_2.1.2       tidyr_1.2.0       tibble_3.1.7      tidyverse_1.3.1  
-##  [9] rmarkdown_2.14    furrr_0.3.0       future_1.25.0     fs_1.5.2         
-## [13] ggpmisc_0.4.6     ggpp_0.4.4        ggplot2_3.3.6     viridis_0.6.2    
-## [17] viridisLite_0.4.0 patchwork_1.1.1   easyclimate_0.1.6 here_1.0.1       
+##  [1] forcats_0.5.1     stringr_1.4.1     dplyr_1.0.9       purrr_0.3.4      
+##  [5] readr_2.1.2       tidyr_1.2.0       tibble_3.1.7      tidyverse_1.3.2  
+##  [9] rmarkdown_2.16    furrr_0.3.0       future_1.26.1     fs_1.5.2         
+## [13] ggpmisc_0.4.7     ggpp_0.4.4        ggplot2_3.3.6     viridis_0.6.2    
+## [17] viridisLite_0.4.1 patchwork_1.1.1   easyclimate_0.1.6 here_1.0.1       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-157       lubridate_1.8.0    bit64_4.0.5        httr_1.4.3        
-##  [5] rprojroot_2.0.3    tools_4.2.0        backports_1.4.1    bslib_0.3.1       
-##  [9] utf8_1.2.2         R6_2.5.1           mgcv_1.8-40        DBI_1.1.2         
-## [13] colorspace_2.0-3   withr_2.5.0        tidyselect_1.1.2   gridExtra_2.3     
-## [17] git2r_0.30.1       bit_4.0.4          compiler_4.2.0     cli_3.3.0         
-## [21] rvest_1.0.2        quantreg_5.93      pacman_0.5.1       SparseM_1.81      
-## [25] xml2_1.3.3         labeling_0.4.2     sass_0.4.1         scales_1.2.0      
-## [29] digest_0.6.29      jpeg_0.1-9         pkgconfig_2.0.3    htmltools_0.5.2   
-## [33] parallelly_1.31.1  dbplyr_2.1.1       fastmap_1.1.0      highr_0.9         
-## [37] maps_3.4.0         rlang_1.0.2        readxl_1.4.0       rstudioapi_0.13   
-## [41] jquerylib_0.1.4    generics_0.1.2     farver_2.1.0       jsonlite_1.8.0    
-## [45] vroom_1.5.7        magrittr_2.0.3     Matrix_1.4-1       munsell_0.5.0     
-## [49] fansi_1.0.3        lifecycle_1.0.1    stringi_1.7.6      yaml_2.3.5        
-## [53] MASS_7.3-56        grid_4.2.0         parallel_4.2.0     listenv_0.8.0     
-## [57] crayon_1.5.1       lattice_0.20-45    haven_2.5.0        splines_4.2.0     
-## [61] hms_1.1.1          knitr_1.39.3       pillar_1.7.0       emo_0.0.0.9000    
-## [65] codetools_0.2-18   reprex_2.0.1       glue_1.6.2         evaluate_0.15     
-## [69] modelr_0.1.8       vctrs_0.4.1        png_0.1-7          tzdb_0.3.0        
-## [73] MatrixModels_0.5-0 cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
-## [77] xfun_0.31          broom_0.8.0        survival_3.3-1     globals_0.15.0    
-## [81] ellipsis_0.3.2
+##  [1] nlme_3.1-157        bit64_4.0.5         lubridate_1.8.0    
+##  [4] httr_1.4.3          rprojroot_2.0.3     tools_4.2.1        
+##  [7] backports_1.4.1     bslib_0.4.0         utf8_1.2.2         
+## [10] R6_2.5.1            mgcv_1.8-40         DBI_1.1.3          
+## [13] colorspace_2.0-3    withr_2.5.0         tidyselect_1.1.2   
+## [16] gridExtra_2.3       git2r_0.30.1        bit_4.0.4          
+## [19] compiler_4.2.1      cli_3.3.0           rvest_1.0.2        
+## [22] quantreg_5.93       pacman_0.5.1        SparseM_1.81       
+## [25] xml2_1.3.3          labeling_0.4.2      sass_0.4.2         
+## [28] scales_1.2.1        digest_0.6.29       jpeg_0.1-9         
+## [31] pkgconfig_2.0.3     htmltools_0.5.3     parallelly_1.32.0  
+## [34] dbplyr_2.2.1        fastmap_1.1.0       highr_0.9          
+## [37] maps_3.4.0          rlang_1.0.6         readxl_1.4.0       
+## [40] rstudioapi_0.13     jquerylib_0.1.4     generics_0.1.3     
+## [43] farver_2.1.1        jsonlite_1.8.0      vroom_1.5.7        
+## [46] googlesheets4_1.0.0 magrittr_2.0.3      Matrix_1.4-1       
+## [49] munsell_0.5.0       fansi_1.0.3         lifecycle_1.0.3    
+## [52] stringi_1.7.8       yaml_2.3.5          MASS_7.3-57        
+## [55] grid_4.2.1          parallel_4.2.1      listenv_0.8.0      
+## [58] crayon_1.5.2        lattice_0.20-45     haven_2.5.0        
+## [61] splines_4.2.1       hms_1.1.1           knitr_1.40.1       
+## [64] pillar_1.8.1        emo_0.0.0.9000      codetools_0.2-18   
+## [67] reprex_2.0.1        glue_1.6.2          evaluate_0.18      
+## [70] modelr_0.1.8        png_0.1-7           vctrs_0.5.0        
+## [73] tzdb_0.3.0          MatrixModels_0.5-0  cellranger_1.1.0   
+## [76] gtable_0.3.0        assertthat_0.2.1    cachem_1.0.6       
+## [79] xfun_0.32           broom_1.0.0         survival_3.3-1     
+## [82] googledrive_2.0.0   gargle_1.2.0        globals_0.15.1     
+## [85] ellipsis_0.3.2
 ```
 
 </details>
-

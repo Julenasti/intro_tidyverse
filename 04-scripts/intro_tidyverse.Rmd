@@ -1,7 +1,7 @@
 ---
 title: "Sacando el máximo partido a Tidyverse"
 author: "Julen Astigarraga"
-date: "13/07/2022"
+date: "07/02/2023"
 output:
   html_document:
     keep_md: yes
@@ -33,7 +33,6 @@ pacman::p_load(
 
 # see attached packages & conflicts
 library(tidyverse)
-
 ```
 
 ```{r tidydata, echo = FALSE, fig.align = "center", fig.cap = "Illustrations from Allison Horst"}
@@ -358,9 +357,17 @@ glimpse(co_data_l)
 
 co_data_l[, "country_name"]
 
+# new shortcut for anonymous functions
+# before
 select_example <- function(dat, x){
   return(dat[, x])
 }
+# now
+select_example <- \(dat, x){
+  return(dat[, x])
+}
+
+# the base pipe doesn’t require that you load magrittr and the new function shorthand works everywhere, not just in purrr functions. Additionally, being able to specify the argument name for the anonymous function can often lead to clearer code (from https://www.tidyverse.org/blog/2022/12/purrr-1-0-0/).
 
 select_example(co_data_l, "country_name")
 
@@ -437,8 +444,13 @@ arg_3 <- list(
   )
   )
 
+## before
+# arg_3 |>
+#   pmap(gg_theme) |>
+#   reduce(`+`)
+## now
 arg_3 |>
-  pmap(gg_theme) |>
+  pmap(\(gg, units, title) gg_theme(gg, units, title)) |>
   reduce(`+`)
 
 gg_ye_co_sec_th <- gg_ye_co_sec +
@@ -493,10 +505,14 @@ ggsave(
 3\. Useful
 
 ```{r useful}
+
 read_all_rds <- function(path){
   path |>
     dir_ls(regexp = "\\.rds$") |> 
-    map(read_rds)
+    ## before
+    # map(read_rds)
+    ## now
+    map(\(fl) read_rds(fl))
 }
 
 rds_files <- read_all_rds(path = here("02-data"))
@@ -515,11 +531,20 @@ co_temp_nested <- co_temp |>
   group_by(Sector) |>
   nest() |> 
   mutate(
-    lm_obj = map(data, ~lm(
-      Tmean.year ~ co_value, data = .x)),
+    ## before
+    # lm_obj = map(data, ~lm(
+    #   Tmean.year ~ co_value, data = .x)),
+    ## now
+    lm_obj = map(data, \(dat) lm(
+      Tmean.year ~ co_value, data = dat)),
+    ## before
+    # pred = map2(lm_obj, data,
+    #             ~predict(.x, .y)),
+    ## now
     pred = map2(lm_obj, data,
-                ~predict(.x, .y)),
-    cor = map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
+                \(x, y) predict(x, y)),
+    cor = map2_dbl(pred, data, \(x, y) 
+                   cor(x, y$Tmean.year))
     )
 
 co_temp_nested
@@ -537,11 +562,12 @@ co_temp_nested <- co_temp |>
   group_by(Sector) |>
   nest() |> 
   mutate(
-    lm_obj = future_map(data, ~lm(
-      Tmean.year ~ co_value, data = .x)),
+    lm_obj = future_map(data, \(dat) lm(
+      Tmean.year ~ co_value, data = dat)),
     pred = future_map2(lm_obj, data,
-                ~predict(.x, .y)),
-    cor = future_map2_dbl(pred, data, ~cor(.x, .y$Tmean.year))
+                       \(x, y) predict(x, y)),
+    cor = future_map2_dbl(pred, data, \(x, y) 
+                          cor(x, y$Tmean.year))
     )
 ```
 
@@ -579,4 +605,3 @@ sessionInfo()
 ```
 
 </details>
-
